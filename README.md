@@ -1,3 +1,6 @@
+## NUTRITION BOT 
+Web application to guide the user and make the most of artificial intelligence when generating nutritional plans according to each individual
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
