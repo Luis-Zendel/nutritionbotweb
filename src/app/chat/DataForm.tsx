@@ -1,16 +1,20 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { Button, Typography, Card, CardBody, Input } from "@material-tailwind/react";
 import {
   ChatBubbleOvalLeftEllipsisIcon,
   PlayCircleIcon,
 } from "@heroicons/react/24/solid";
+import { Button, Card, CardBody, Input, Typography } from "@material-tailwind/react";
+import Image from "next/image";
+import { useState } from "react";
 
 import BlogCardWithImage from "@/components/blog-card-with-image";
 import SimpleBlogCard from "@/components/simple-blog-card";
+import { FiTarget } from "react-icons/fi";
+import { GiAges, GiHealthNormal, GiPencilRuler, GiSprint, GiWeight } from "react-icons/gi";
+import { GrUser } from "react-icons/gr";
+import { MdNoFood } from "react-icons/md";
+import { TiTime } from "react-icons/ti";
 
 const SIMPLE_CONTENT = [
   {
@@ -52,7 +56,28 @@ const fetchDiet = async (url: string, data: any): Promise<any> => {
   }
 };
 
-export function BlogPost() {
+const DataForm = () => {
+  const [name, setName] = useState("");
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
+  const [activityHours, setActivityHours] = useState("");
+  const [pishycalActivity, setPhysicalActivity] = useState("");
+  const [objective, setObjective] = useState("");
+  const [diseases, setDiseases] = useState("");
+  const [restrictions, setRestrictions] = useState("");
+
+  const userData = {
+    name,
+    weight,
+    height,
+    activityHours,
+    pishycalActivity,
+    objective,
+    diseases,
+    restrictions,
+  }
+
+
   const [diet, setDiet] = useState({
     almuerzo: "",
     antes_de_dormir: "",
@@ -61,7 +86,6 @@ export function BlogPost() {
     media_manana: "",
     media_tarde: "",
   });
-  const [nombre,setNombre] = useState("")
 
   const handleGenereteDietClick = async () => {
     try {
@@ -78,114 +102,152 @@ export function BlogPost() {
       console.error("Error al realizar la solicitud:", error);
     }
   };
-  const handleChangeNombre = (name: string) =>{+
-    setNombre(name)
+
+  const handleChangeName = (name: string) => {
+    setName(name)
   }
+
+  const handleChangeweight = (weight: string) => {
+    setWeight(weight)
+  }
+
+  const handleChangeHeight = (height: string) => {
+    setHeight(height);
+  }
+
+  const handleChangeActivityHours = (hours: string) => {
+    setActivityHours(hours);
+  }
+
+  const handleChangePhysicalActivity = (activity: string) => {
+    setPhysicalActivity(activity);
+  }
+
+  const handleChangeObjective = (objective: string) => {
+    setObjective(objective);
+  }
+
+  const handleChangeDiseases = (diseases: string) => {
+    setDiseases(diseases);
+  }
+
+  const handleChangeRestrictions = (restrictions: string) => {
+    setRestrictions(restrictions);
+  }
+
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
       <div className="my-5 w-full mx-10">
+
         <div className="flex items-center justify-center">
-        <Typography
-              variant="h1"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Formulario
-            </Typography>
-        </div>
-        <form className="w-2/3 mx-auto">
-        <Typography
-              variant="h4"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Nombre:
-            </Typography>
-            <Input variant="static" label="Static" placeholder="Nombre" onChange={(e)=>{handleChangeNombre(e.target.value)}} />
-          <div className="w-full flex mt-3">
-            <div className="w-1/2 mx-2">
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Edad:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Estatura:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-
-
-            </div>
-            <div className="w-1/4 mx-auto">
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Peso:
-            </Typography>
-            <Input variant="outlined" label="" placeholder=""  className=""/>
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Peso:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-
-            </div>
-          
-
-          </div>
           <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 mt-3"
-            >
-              Describe tu objetivo de la dieta
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-            <div className="w-full flex mt-3">
-            <div className="w-1/2 mx-2">
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Horas de actividad fisica por semana:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Estatura:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            variant="h1"
+            className="leading-[45px] mb-4 !text-gray-900 "
+          >
+            Formulario
+          </Typography>
+        </div>
 
+        <form className="w-full mx-auto max-w-3xl">
+
+          <Typography
+            variant="h4"
+            className="leading-[45px] mb-4 !text-gray-900 "
+          >
+            Nombre:
+          </Typography>
+          <Input variant="static" label="Static" placeholder="Nombre" onChange={(e) => { handleChangeName(e.target.value); }} crossOrigin={undefined} icon={<GrUser />} />
+
+          <div className="w-full grid mt-3 grid-cols-1">
+            <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
+              <div className="w-full sm:max-w-60">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-4 !text-gray-900"
+                >
+                  Edad:
+                </Typography>
+                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} />
+              </div>
+
+              <div className="w-full sm:max-w-60">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-4 !text-gray-900 "
+                >
+                  Estatura:
+                </Typography>
+                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} />
+              </div>
+            </div>
+
+            <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
+              <div className="w-full sm:max-w-60">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-4 !text-gray-900 "
+                >
+                  Peso:
+                </Typography>
+                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} />
+              </div>
+
+              <div className="w-full sm:max-w-60">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-4 !text-gray-900 "
+                >
+                  Horas actividad física:
+                </Typography>
+                <Input variant="outlined" label="Horas actividad por semana" placeholder="" icon={<TiTime />} />
+              </div>
 
             </div>
-            <div className="w-1/2 mx-auto">
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Peso:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Peso:
-            </Typography>
-            <Input variant="outlined" label="" placeholder="" />
-
-            </div>
-          
-
           </div>
-  
+
+          <div>
+            <Typography
+              variant="h6"
+              className="leading-[45px] mb-0 !text-gray-900 mt-3"
+            >
+              Describe tu objetivo de la dieta:
+            </Typography>
+            <Input variant="static" label="" placeholder="Objetivo de la dieta" icon={<FiTarget />} />
+          </div>
+
+          <div>
+            <Typography
+              variant="h6"
+              className="leading-[45px] mb-0 !text-gray-900 mt-3"
+            >
+              Anota la actividad física que realizas:
+            </Typography>
+            <Input variant="static" label="" placeholder="Actividad física realizada" icon={<GiSprint />} />
+          </div>
+
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
+
+            <div>
+              <Typography
+                variant="h6"
+                className="leading-[45px] mb-0 !text-gray-900 mt-3"
+              >
+                ¿Tienes alguna enfermedad o padecimiento?:
+              </Typography>
+              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} />
+            </div>
+
+            <div>
+              <Typography
+                variant="h6"
+                className="leading-[45px] mb-0 !text-gray-900 mt-3"
+              >
+                Restricciones alimenticias:
+              </Typography>
+              <Input variant="static" label="" placeholder="Describe brevemente" icon={<MdNoFood />} />
+            </div>
+          </div>
+
         </form>
       </div>
       <Button
@@ -196,9 +258,9 @@ export function BlogPost() {
           handleGenereteDietClick();
         }}
       >
-              <Typography variant="h5" className="text-center" color="white">
+        <Typography variant="h5" className="text-center" color="white">
 
-        Generar
+          Generar
         </Typography>
       </Button>
       <Typography variant="h3" className="text-center" color="blue-gray">
@@ -513,11 +575,10 @@ export function BlogPost() {
           {SIMPLE_CONTENT.map((props, idx) => (
             <div
               key={idx}
-              className={`${
-                SIMPLE_CONTENT.length - 1 !== idx
-                  ? "md:border-b"
-                  : "md:border-none"
-              } border-blue-gray-100 mb-6 `}
+              className={`${SIMPLE_CONTENT.length - 1 !== idx
+                ? "md:border-b"
+                : "md:border-none"
+                } border-blue-gray-100 mb-6 `}
             >
               <SimpleBlogCard key={idx} {...props} />
             </div>
@@ -528,4 +589,5 @@ export function BlogPost() {
   );
 }
 
-export default BlogPost;
+export { DataForm };
+

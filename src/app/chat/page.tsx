@@ -1,18 +1,16 @@
 // components
-import { Navbar, Footer } from "@/components";
+import { Footer, Navbar } from "@/components";
 
 // sections
+import { DataForm } from ".";
 import Hero from "./hero";
-import Content from "./content";
-import Comments from "./comments";
-import BlogPosts from "./blog-posts";
 
 export default function Campaign() {
   return (
     <>
       <Navbar />
       <Hero />
-      <BlogPosts />
+      <DataForm />
       <Footer />
     </>
   );
