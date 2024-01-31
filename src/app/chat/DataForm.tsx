@@ -6,7 +6,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { Button, Card, CardBody, Input, Typography } from "@material-tailwind/react";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import BlogCardWithImage from "@/components/blog-card-with-image";
 import SimpleBlogCard from "@/components/simple-blog-card";
@@ -58,6 +58,7 @@ const fetchDiet = async (url: string, data: any): Promise<any> => {
 
 const DataForm = () => {
   const [name, setName] = useState("");
+  const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [activityHours, setActivityHours] = useState("");
@@ -68,6 +69,7 @@ const DataForm = () => {
 
   const userData = {
     name,
+    age,
     weight,
     height,
     activityHours,
@@ -89,12 +91,17 @@ const DataForm = () => {
 
   const handleGenereteDietClick = async () => {
     try {
-      console.log('Se genero la peticion')
+      console.log(`Se genero la peticion con:`);
       const url = "http://127.0.0.1:5000/api/nutrition/chatbot";
+      /*       const postData = {
+              name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
+              time: "Wed, 21 Oct 2015 18:27:50 GMT",
+            }; */
       const postData = {
-        name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.  ",
+        name: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana  el tipo de actividad fisica que realizo es ${userData.pishycalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
         time: "Wed, 21 Oct 2015 18:27:50 GMT",
-      };
+      }
+      console.log(postData);
       const result = await fetchDiet(url, postData);
       console.log("Se recibio resultado ");
       setDiet(result);
@@ -103,36 +110,8 @@ const DataForm = () => {
     }
   };
 
-  const handleChangeName = (name: string) => {
-    setName(name)
-  }
-
-  const handleChangeweight = (weight: string) => {
-    setWeight(weight)
-  }
-
-  const handleChangeHeight = (height: string) => {
-    setHeight(height);
-  }
-
-  const handleChangeActivityHours = (hours: string) => {
-    setActivityHours(hours);
-  }
-
-  const handleChangePhysicalActivity = (activity: string) => {
-    setPhysicalActivity(activity);
-  }
-
-  const handleChangeObjective = (objective: string) => {
-    setObjective(objective);
-  }
-
-  const handleChangeDiseases = (diseases: string) => {
-    setDiseases(diseases);
-  }
-
-  const handleChangeRestrictions = (restrictions: string) => {
-    setRestrictions(restrictions);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, dispatch: React.Dispatch<React.SetStateAction<string>>) => {
+    dispatch(event.target.value)
   }
 
   return (
@@ -156,7 +135,7 @@ const DataForm = () => {
           >
             Nombre:
           </Typography>
-          <Input variant="static" label="Static" placeholder="Nombre" onChange={(e) => { handleChangeName(e.target.value); }} crossOrigin={undefined} icon={<GrUser />} />
+          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => handleChange(e, setName) } crossOrigin={undefined} icon={<GrUser />} />
 
           <div className="w-full grid mt-3 grid-cols-1">
             <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
@@ -167,7 +146,7 @@ const DataForm = () => {
                 >
                   Edad:
                 </Typography>
-                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} />
+                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => handleChange(e, setAge)} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -175,9 +154,9 @@ const DataForm = () => {
                   variant="h6"
                   className="leading-[45px] mb-4 !text-gray-900 "
                 >
-                  Estatura:
+                  Estatura (cm):
                 </Typography>
-                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} />
+                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => handleChange(e, setHeight)}/>
               </div>
             </div>
 
@@ -187,9 +166,9 @@ const DataForm = () => {
                   variant="h6"
                   className="leading-[45px] mb-4 !text-gray-900 "
                 >
-                  Peso:
+                  Peso (kg):
                 </Typography>
-                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} />
+                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} onChange={e => handleChange(e, setWeight)} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -199,7 +178,7 @@ const DataForm = () => {
                 >
                   Horas actividad física:
                 </Typography>
-                <Input variant="outlined" label="Horas actividad por semana" placeholder="" icon={<TiTime />} />
+                <Input variant="outlined" label="Horas actividad por semana" placeholder="" icon={<TiTime />} onChange={e => handleChange(e, setActivityHours)} />
               </div>
 
             </div>
@@ -212,7 +191,7 @@ const DataForm = () => {
             >
               Describe tu objetivo de la dieta:
             </Typography>
-            <Input variant="static" label="" placeholder="Objetivo de la dieta" icon={<FiTarget />} />
+            <Input variant="static" label="" placeholder="Objetivo de la dieta" icon={<FiTarget />} onChange={e => handleChange(e, setObjective)} />
           </div>
 
           <div>
@@ -222,7 +201,7 @@ const DataForm = () => {
             >
               Anota la actividad física que realizas:
             </Typography>
-            <Input variant="static" label="" placeholder="Actividad física realizada" icon={<GiSprint />} />
+            <Input variant="static" label="" placeholder="Actividad física realizada" icon={<GiSprint />} onChange={e => handleChange(e, setPhysicalActivity)} />
           </div>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
@@ -234,7 +213,7 @@ const DataForm = () => {
               >
                 ¿Tienes alguna enfermedad o padecimiento?:
               </Typography>
-              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} />
+              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} onChange={e => handleChange(e,setDiseases)} />
             </div>
 
             <div>
@@ -244,12 +223,14 @@ const DataForm = () => {
               >
                 Restricciones alimenticias:
               </Typography>
-              <Input variant="static" label="" placeholder="Describe brevemente" icon={<MdNoFood />} />
+              <Input variant="static" label="" placeholder="Describe brevemente" icon={<MdNoFood />} onChange={e => handleChange(e, setRestrictions)} />
             </div>
           </div>
 
         </form>
       </div>
+
+
       <Button
         color="gray"
         className="mb-3"
@@ -259,10 +240,11 @@ const DataForm = () => {
         }}
       >
         <Typography variant="h5" className="text-center" color="white">
-
           Generar
         </Typography>
       </Button>
+
+
       <Typography variant="h3" className="text-center" color="blue-gray">
         Plan Alimenticio
       </Typography>
