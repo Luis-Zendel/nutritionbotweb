@@ -14,7 +14,6 @@ import { FiTarget } from "react-icons/fi";
 import { GiAges, GiHealthNormal, GiPencilRuler, GiSprint, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 import { MdNoFood } from "react-icons/md";
-import { TiTime } from "react-icons/ti";
 
 const SIMPLE_CONTENT = [
   {
@@ -67,6 +66,27 @@ const DataForm = () => {
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
 
+  const [inputErrors, setInputErrors] = useState({
+    name: false,
+    age: false,
+    weight: false,
+    height: false,
+    activityHours: false,
+    physicalActivity: false,
+    objective: false,
+    diseases: false,
+    restrictions: false,
+  });
+
+  const [diet, setDiet] = useState({
+    almuerzo: "",
+    antes_de_dormir: "",
+    cena: "",
+    desayuno: "",
+    media_manana: "",
+    media_tarde: "",
+  });
+
   const userData = {
     name,
     age,
@@ -80,14 +100,6 @@ const DataForm = () => {
   }
 
 
-  const [diet, setDiet] = useState({
-    almuerzo: "",
-    antes_de_dormir: "",
-    cena: "",
-    desayuno: "",
-    media_manana: "",
-    media_tarde: "",
-  });
 
   const handleGenereteDietClick = async () => {
     try {
@@ -111,8 +123,25 @@ const DataForm = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, dispatch: React.Dispatch<React.SetStateAction<string>>) => {
-    dispatch(event.target.value)
-  }
+    dispatch(event.target.value);
+  };
+
+  const isInputValid = (
+    event: React.ChangeEvent<HTMLInputElement>, //InputEvent
+    dispatch: React.Dispatch<React.SetStateAction<string>>, //React update function
+    regex: RegExp, //Regular expression
+    stateName: string  //State Name 
+  ) => {
+    if (!regex.test(event.target.value)) {
+      setInputErrors((prevErrors) => ({ ...prevErrors, [stateName]: true }));
+    } else {
+      handleChange(event, dispatch);
+      setInputErrors((prevErrors) => ({ ...prevErrors, [stateName]: false }));
+    }
+  };
+
+
+
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
@@ -135,7 +164,7 @@ const DataForm = () => {
           >
             Nombre:
           </Typography>
-          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => handleChange(e, setName) } crossOrigin={undefined} icon={<GrUser />} />
+          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => handleChange(e, setName)} crossOrigin={undefined} icon={<GrUser />}/>
 
           <div className="w-full grid mt-3 grid-cols-1">
             <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
@@ -146,7 +175,7 @@ const DataForm = () => {
                 >
                   Edad:
                 </Typography>
-                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => handleChange(e, setAge)} />
+                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => isInputValid(e, setAge, /^(100|[1-9]?[0-9])$/, "age")} error={inputErrors.age} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -156,7 +185,7 @@ const DataForm = () => {
                 >
                   Estatura (cm):
                 </Typography>
-                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => handleChange(e, setHeight)}/>
+                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => isInputValid(e, setHeight, /^([1-9]\d{0,2}|0)$/, "height")} error={inputErrors.height} />
               </div>
             </div>
 
@@ -168,7 +197,7 @@ const DataForm = () => {
                 >
                   Peso (kg):
                 </Typography>
-                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} onChange={e => handleChange(e, setWeight)} />
+                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -178,7 +207,7 @@ const DataForm = () => {
                 >
                   Horas actividad física:
                 </Typography>
-                <Input variant="outlined" label="Horas actividad por semana" placeholder="" icon={<TiTime />} onChange={e => handleChange(e, setActivityHours)} />
+                <Input variant="outlined" label="Horas actividad por semana" placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} />
               </div>
 
             </div>
@@ -213,7 +242,7 @@ const DataForm = () => {
               >
                 ¿Tienes alguna enfermedad o padecimiento?:
               </Typography>
-              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} onChange={e => handleChange(e,setDiseases)} />
+              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} onChange={e => handleChange(e, setDiseases)} />
             </div>
 
             <div>
