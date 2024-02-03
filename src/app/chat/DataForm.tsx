@@ -4,16 +4,15 @@ import {
   ChatBubbleOvalLeftEllipsisIcon,
   PlayCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Button, Card, CardBody, Input, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, Dialog, DialogBody, DialogHeader, Input, Option, Select, Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import React, { useState } from "react";
 
 import BlogCardWithImage from "@/components/blog-card-with-image";
 import SimpleBlogCard from "@/components/simple-blog-card";
-import { FiTarget } from "react-icons/fi";
-import { GiAges, GiHealthNormal, GiPencilRuler, GiSprint, GiWeight } from "react-icons/gi";
+import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
-import { MdNoFood } from "react-icons/md";
+import { IoWarningOutline } from "react-icons/io5";
 
 const SIMPLE_CONTENT = [
   {
@@ -61,7 +60,7 @@ const DataForm = () => {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [activityHours, setActivityHours] = useState("");
-  const [pishycalActivity, setPhysicalActivity] = useState("");
+  const [physicalActivity, setPhysicalActivity] = useState("");
   const [objective, setObjective] = useState("");
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
@@ -78,6 +77,9 @@ const DataForm = () => {
     restrictions: false,
   });
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogInfo, setDialogInfo] = useState({ title: "", message: "" });
+
   const [diet, setDiet] = useState({
     almuerzo: "",
     antes_de_dormir: "",
@@ -93,15 +95,41 @@ const DataForm = () => {
     weight,
     height,
     activityHours,
-    pishycalActivity,
+    physicalActivity,
     objective,
     diseases,
     restrictions,
   }
 
+  const areInputsFilled = () => {
+    let allFieldsFilled = true;
+
+    Object.entries(userData).forEach(([key, value]) => {
+      if (value === "") {
+        setInputErrors(prevState => ({ ...prevState, [key]: true }));
+        allFieldsFilled = false;
+      }
+    });
+
+    return allFieldsFilled;
+  };
+
+  const areNoErrors = () => Object.values(inputErrors).every(value => value === false);
 
 
   const handleGenereteDietClick = async () => {
+    if (!areInputsFilled()) {
+      setOpenDialog(true);
+      setDialogInfo({ title: "Información incompleta", message: "Verifica que hayas llenado todos los campos previamente" });
+      return
+    }
+
+    if (!areNoErrors()) {
+      setOpenDialog(true);
+      setDialogInfo({ title: "Información incorrecta", message: "Algunos campos no son válidos, verifica antes de continuar" });
+      return
+    }
+
     try {
       console.log(`Se genero la peticion con:`);
       const url = "http://127.0.0.1:5000/api/nutrition/chatbot";
@@ -110,10 +138,10 @@ const DataForm = () => {
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
       const postData = {
-        name: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana  el tipo de actividad fisica que realizo es ${userData.pishycalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
+        name: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
         time: "Wed, 21 Oct 2015 18:27:50 GMT",
       }
-      console.log(postData);
+      console.log(postData.name);
       const result = await fetchDiet(url, postData);
       console.log("Se recibio resultado ");
       setDiet(result);
@@ -140,6 +168,19 @@ const DataForm = () => {
     }
   };
 
+  const isValueValid = (
+    value: string | undefined, //Select value
+    dispatch: React.Dispatch<React.SetStateAction<string>>, //React update function
+    stateName: string //State Name
+  ) => {
+    setInputErrors((prevErrors) => ({ ...prevErrors, [stateName]: false }));
+    if (value == undefined) {
+      dispatch("")
+    } else {
+      dispatch(value);
+    }
+  }
+
 
 
 
@@ -164,7 +205,7 @@ const DataForm = () => {
           >
             Nombre:
           </Typography>
-          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => handleChange(e, setName)} crossOrigin={undefined} icon={<GrUser />}/>
+          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => isValueValid(e.target.value, setName, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name} />
 
           <div className="w-full grid mt-3 grid-cols-1">
             <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
@@ -197,7 +238,7 @@ const DataForm = () => {
                 >
                   Peso (kg):
                 </Typography>
-                <Input variant="outlined" label="Peso" placeholder="" className="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} />
+                <Input variant="outlined" label="Peso" placeholder="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -207,7 +248,7 @@ const DataForm = () => {
                 >
                   Horas actividad física:
                 </Typography>
-                <Input variant="outlined" label="Horas actividad por semana" placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} />
+                <Input variant="outlined" label="Horas actividad por semana" icon={<GiClockwork />} placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} />
               </div>
 
             </div>
@@ -220,7 +261,18 @@ const DataForm = () => {
             >
               Describe tu objetivo de la dieta:
             </Typography>
-            <Input variant="static" label="" placeholder="Objetivo de la dieta" icon={<FiTarget />} onChange={e => handleChange(e, setObjective)} />
+            <Select variant="static" onChange={e => isValueValid(e, setObjective, "objective")} name="objetivo" error={inputErrors.objective}>
+              <Option value="perder peso">Perder peso</Option>
+              <Option value="mantener peso">Mantener mi peso</Option>
+              <Option value="ganar peso">Ganar peso</Option>
+              <Option value="tonificar musculos">Tonificar músculos</Option>
+              <Option value="mejorar salud general">Mejorar mi salud general</Option>
+              <Option value="aumentar masa muscular">Aumentar masa muscular</Option>
+              <Option value="controlar diabetes">Controlar la diabetes</Option>
+              <Option value="mejorar rendimiento deportivo">Mejorar rendimiento deportivo</Option>
+              {/* Agrega más opciones según sea necesario */}
+            </Select>
+
           </div>
 
           <div>
@@ -228,9 +280,15 @@ const DataForm = () => {
               variant="h6"
               className="leading-[45px] mb-0 !text-gray-900 mt-3"
             >
-              Anota la actividad física que realizas:
+              El nivel de actividad física que realizas:
             </Typography>
-            <Input variant="static" label="" placeholder="Actividad física realizada" icon={<GiSprint />} onChange={e => handleChange(e, setPhysicalActivity)} />
+            <Select variant="static" onChange={e => isValueValid(e, setPhysicalActivity, "physicalActivity")} name="nivel_actividad_fisica" error={inputErrors.physicalActivity}>
+              <Option value="sedentario">Sedentario (poco o ningún ejercicio)</Option>
+              <Option value="ligero">Ligero (actividad ligera o caminar ligero)</Option>
+              <Option value="moderado">Moderado (ejercicio moderado o deportes ligeros)</Option>
+              <Option value="activo">Activo (actividad física regular o deportes intensos)</Option>
+              <Option value="muy activo">Muy Activo (actividad física intensa o entrenamiento diario)</Option>
+            </Select>
           </div>
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
@@ -242,7 +300,16 @@ const DataForm = () => {
               >
                 ¿Tienes alguna enfermedad o padecimiento?:
               </Typography>
-              <Input variant="static" label="" placeholder="Describe tu condición" icon={<GiHealthNormal />} onChange={e => handleChange(e, setDiseases)} />
+              <Select variant="static" onChange={e => isValueValid(e, setDiseases, "diseases")} name="enfermedad" error={inputErrors.diseases}>
+                <Option value="No tengo ninguna enfermedad o padecimiento">Ninguna</Option>
+                <Option value="Tengo diabetes">Diabetes</Option>
+                <Option value="Tengo hipertensión">Hipertensión</Option>
+                <Option value="Tengo colesterol alto">Colesterol alto</Option>
+                <Option value="Tengo enfermedad cardíaca">Enfermedad cardíaca</Option>
+                <Option value="Tengo alergias alimentarias">Alergias alimentarias</Option>
+                {/* Agrega más opciones según sea necesario */}
+              </Select>
+
             </div>
 
             <div>
@@ -252,7 +319,16 @@ const DataForm = () => {
               >
                 Restricciones alimenticias:
               </Typography>
-              <Input variant="static" label="" placeholder="Describe brevemente" icon={<MdNoFood />} onChange={e => handleChange(e, setRestrictions)} />
+              <Select variant="static" onChange={e => isValueValid(e, setRestrictions, "restrictions")} name="restricciones_alimentarias" error={inputErrors.restrictions}>
+                <Option value="No tengo ninguna restricción alimentaria">Ninguna</Option>
+                <Option value="No puedo comer gluten">Gluten</Option>
+                <Option value="No puedo comer lácteos">Lácteos</Option>
+                <Option value="No puedo comer frutos secos">Frutos secos</Option>
+                <Option value="No puedo comer mariscos">Mariscos</Option>
+                <Option value="No puedo comer carne">Carne</Option>
+                {/* Agrega más opciones según sea necesario */}
+              </Select>
+
             </div>
           </div>
 
@@ -272,6 +348,21 @@ const DataForm = () => {
           Generar
         </Typography>
       </Button>
+
+      <Dialog open={openDialog} handler={() => setOpenDialog(!openDialog)}>
+        <DialogHeader>
+          <Typography variant="h3" className="flex items-center justify-start gap-2 text-black">
+            {dialogInfo.title}
+          </Typography>
+        </DialogHeader>
+        <DialogBody>
+          <Typography variant="h5" className="flex items-center justify-start gap-2 text-blue-gray-900">
+            <IoWarningOutline className="w-10 h-10 text-amber-400" />
+            {dialogInfo.message}
+          </Typography>
+        </DialogBody>
+      </Dialog>
+
 
 
       <Typography variant="h3" className="text-center" color="blue-gray">
