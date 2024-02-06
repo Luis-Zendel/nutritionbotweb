@@ -13,6 +13,7 @@ import SimpleBlogCard from "@/components/simple-blog-card";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
+import { fetchDiet } from "../API/api";
 
 const SIMPLE_CONTENT = [
   {
@@ -34,25 +35,7 @@ const SIMPLE_CONTENT = [
     name: "By Alexa Rossa",
   },
 ];
-const fetchDiet = async (url: string, data: any): Promise<any> => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Puedes agregar otros encabezados según sea necesario
-      },
-      body: JSON.stringify(data),
-    });
-    if (!response.ok) {
-      throw new Error("No se genero respuesta ");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error al realizar la solicitud:", error);
-    throw error;
-  }
-};
+
 
 const DataForm = () => {
   const [name, setName] = useState("");
@@ -101,7 +84,7 @@ const DataForm = () => {
     restrictions,
   }
 
-  const areInputsFilled = () => {
+  const validateInputsFilled = () => {
     let allFieldsFilled = true;
 
     Object.entries(userData).forEach(([key, value]) => {
@@ -114,17 +97,19 @@ const DataForm = () => {
     return allFieldsFilled;
   };
 
-  const areNoErrors = () => Object.values(inputErrors).every(value => value === false);
-
 
   const handleGenereteDietClick = async () => {
-    if (!areInputsFilled()) {
+
+    const areNoErrors = Object.values(inputErrors).every(value => value === false);
+    const areInputsFilled = validateInputsFilled();
+
+    if (!areInputsFilled) {
       setOpenDialog(true);
       setDialogInfo({ title: "Información incompleta", message: "Verifica que hayas llenado todos los campos previamente" });
       return
     }
 
-    if (!areNoErrors()) {
+    if (!areNoErrors) {
       setOpenDialog(true);
       setDialogInfo({ title: "Información incorrecta", message: "Algunos campos no son válidos, verifica antes de continuar" });
       return
@@ -149,6 +134,7 @@ const DataForm = () => {
       console.error("Error al realizar la solicitud:", error);
     }
   };
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, dispatch: React.Dispatch<React.SetStateAction<string>>) => {
     dispatch(event.target.value);
@@ -205,7 +191,7 @@ const DataForm = () => {
           >
             Nombre:
           </Typography>
-          <Input variant="static" label="Static" placeholder="Nombre" onChange={e => isValueValid(e.target.value, setName, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name} />
+          <Input variant="static" label="Nombre" placeholder="" onChange={e => isInputValid(e, setName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name}/>
 
           <div className="w-full grid mt-3 grid-cols-1">
             <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
