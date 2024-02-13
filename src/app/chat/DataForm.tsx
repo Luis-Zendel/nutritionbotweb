@@ -14,6 +14,44 @@ import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
 import { fetchDiet } from "../API/api";
+import { DesayunoCard } from "./dietInform";
+
+interface Menu {
+  desayuno: string;
+  media_manana: string;
+  almuerzo: string;
+  media_tarde: string;
+  cena: string;
+  antes_de_dormir: string;
+}
+
+const coloresBase = [
+  "teal-400",
+  "pink-400",
+  "purple-400",
+  "indigo-400",
+  "blue-400",
+  "cyan-400",
+  "light-blue-400",
+  "teal-300",
+  "green-400",
+  "lime-400",
+];
+
+const coloresSecundarios = [
+  "amber-400",
+  "orange-400",
+  "deep-orange-400",
+  "red-400",
+  "purple-400",
+  "indigo-400",
+  "blue-400",
+  "cyan-400",
+  "light-blue-400",
+  "teal-300",
+];
+
+
 
 const SIMPLE_CONTENT = [
   {
@@ -35,6 +73,15 @@ const SIMPLE_CONTENT = [
     name: "By Alexa Rossa",
   },
 ];
+
+const menu: Menu = {
+  "almuerzo": "1. Opci\u00f3n 1: Pechuga de pollo a la plancha con ensalada de espinacas, tomates, pepinos y aderezo de vinagreta ligera.\n2. Opci\u00f3n 2: Salm\u00f3n a la parrilla con esp\u00e1rragos al vapor y quinoa.\n3. Opci\u00f3n 3: Ensalada de at\u00fan con lechuga, tomates, aguacate y aderezo bajo en grasa.",
+  "antes_de_dormir": "1. Opci\u00f3n 1: Un pu\u00f1ado de almendras.\n2. Opci\u00f3n 2: Un yogur griego bajo en grasa.\n3. Opci\u00f3n 3: Una porci\u00f3n de queso cottage bajo en grasa.\n\nRecuerda que es importante mantenerse hidratado durante todo el d\u00eda, as\u00ed que no olvides beber suficiente agua. Adem\u00e1s, consulta con un profesional de la salud antes de comenzar cualquier dieta o programa de ejercicio para asegurarte de que sea adecuado para ti.",
+  "cena": "1. Opci\u00f3n 1: Filete de ternera a la parrilla con esp\u00e1rragos y batatas al horno.\n2. Opci\u00f3n 2: Pechuga de pollo al horno con br\u00f3coli y arroz integral.\n3. Opci\u00f3n 3: Salm\u00f3n al horno con esp\u00e1rragos y quinoa.",
+  "desayuno": "1. Opci\u00f3n 1: Omelette de claras de huevo con espinacas y tomates cherry.\n2. Opci\u00f3n 2: Yogur griego bajo en grasa con frutas frescas y granola sin az\u00facar.\n3. Opci\u00f3n 3: Batido de prote\u00ednas con leche baja en grasa, pl\u00e1tano y mantequilla de almendras.",
+  "media_manana": "1. Opci\u00f3n 1: Una porci\u00f3n de frutas frescas (por ejemplo, una manzana o una naranja).\n2. Opci\u00f3n 2: Un pu\u00f1ado de frutos secos (como almendras o nueces).\n3. Opci\u00f3n 3: Un yogur griego bajo en grasa con una cucharada de miel.",
+  "media_tarde": "1. Opci\u00f3n 1: Un pu\u00f1ado de zanahorias baby con hummus.\n2. Opci\u00f3n 2: Palitos de apio con mantequilla de man\u00ed.\n3. Opci\u00f3n 3: Batido de prote\u00ednas con leche baja en grasa y frutas congeladas."
+}
 
 
 const DataForm = () => {
@@ -82,6 +129,17 @@ const DataForm = () => {
     objective,
     diseases,
     restrictions,
+  }
+
+
+  // Convertir el JSON en un objeto con arrays de opciones
+  function dividirOpciones(comida: keyof Menu): string[] {
+    // Dividir la cadena de opciones usando el salto de línea como separador
+    const opciones = menu[comida].split('\n');
+    while (opciones.length >= 4) opciones.pop();
+    // Filtrar las opciones válidas y eliminar los números de las opciones
+    const opcionesFiltradas = opciones.filter(opcion => opcion.trim() !== '').map(opcion => opcion.replace(/^\d+\. /, ''));
+    return opcionesFiltradas;
   }
 
   const validateInputsFilled = () => {
@@ -191,7 +249,7 @@ const DataForm = () => {
           >
             Nombre:
           </Typography>
-          <Input variant="static" label="Nombre" placeholder="" onChange={e => isInputValid(e, setName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name}/>
+          <Input variant="static" label="Nombre" placeholder="" onChange={e => isInputValid(e, setName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name} />
 
           <div className="w-full grid mt-3 grid-cols-1">
             <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
@@ -202,7 +260,7 @@ const DataForm = () => {
                 >
                   Edad:
                 </Typography>
-                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => isInputValid(e, setAge, /^(100|[1-9]?[0-9])$/, "age")} error={inputErrors.age} />
+                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => isInputValid(e, setAge, /^(100|[1-9]?[0-9])$/, "age")} error={inputErrors.age} crossOrigin={undefined} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -212,7 +270,7 @@ const DataForm = () => {
                 >
                   Estatura (cm):
                 </Typography>
-                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => isInputValid(e, setHeight, /^([1-9]\d{0,2}|0)$/, "height")} error={inputErrors.height} />
+                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => isInputValid(e, setHeight, /^([1-9]\d{0,2}|0)$/, "height")} error={inputErrors.height} crossOrigin={undefined} />
               </div>
             </div>
 
@@ -224,7 +282,7 @@ const DataForm = () => {
                 >
                   Peso (kg):
                 </Typography>
-                <Input variant="outlined" label="Peso" placeholder="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} />
+                <Input variant="outlined" label="Peso" placeholder="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} crossOrigin={undefined} />
               </div>
 
               <div className="w-full sm:max-w-60">
@@ -234,7 +292,7 @@ const DataForm = () => {
                 >
                   Horas actividad física:
                 </Typography>
-                <Input variant="outlined" label="Horas actividad por semana" icon={<GiClockwork />} placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} />
+                <Input variant="outlined" label="Horas actividad por semana" icon={<GiClockwork />} placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} crossOrigin={undefined} />
               </div>
 
             </div>
@@ -363,15 +421,25 @@ const DataForm = () => {
         insights, groundbreaking discoveries, and captivating stories from the
         ever-evolving realm of biological sciences.
       </Typography>
+
       <div>
+
+
+        <div className="flex flex-col items-center justify-center gap-4">
+          {Object.entries(diet).map(([title, content], index) => (
+            <DesayunoCard
+              key={title}
+              title={title}
+              content={dividirOpciones(title as keyof Menu)}
+              colorBase={coloresBase[index]}
+              colorSecundario={coloresSecundarios[index]}
+            />
+          ))}
+        </div>
+
+
         <Card shadow={false} className="p-0">
           <CardBody className="p-0 pb-5">
-            <Typography
-              variant="h3"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Desayuno
-            </Typography>
             <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
               {diet.desayuno}
             </Typography>
