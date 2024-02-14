@@ -416,15 +416,11 @@ const DataForm = () => {
         variant="lead"
         className="mt-2 mb-8 w-full text-center font-normal !text-gray-500 max-w-4xl"
       >
-        Stay at the forefront of the latest developments in the world of
-        biology, as our team of expert writers and researchers bring you fresh
-        insights, groundbreaking discoveries, and captivating stories from the
-        ever-evolving realm of biological sciences.
+        ¡Prepárate para descubrir las dietas recomendadas! Recuerda, la asesoría de un profesional de la salud es esencial antes de
+        realizar cualquier cambio significativo en tu dieta.
       </Typography>
 
       <div>
-
-
         <div className="flex flex-col items-center justify-center gap-4">
           {Object.entries(diet).map(([title, content], index) => (
             <DesayunoCard
@@ -436,171 +432,8 @@ const DataForm = () => {
             />
           ))}
         </div>
-
-
-        <Card shadow={false} className="p-0">
-          <CardBody className="p-0 pb-5">
-            <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
-              {diet.desayuno}
-            </Typography>
-            <div className="flex items-center gap-3">
-              <div className="">
-                <Image
-                  width={256}
-                  height={256}
-                  src="/image/avatar2.jpg"
-                  className="w-12 object-cover h-12 rounded-lg"
-                  alt="photo"
-                />
-              </div>
-              <div>
-                <Typography className="!font-bold !text-sm text-gray-900">
-                  Mathew Glock
-                </Typography>
-                <Typography className="!font-normal !text-xs text-gray-500">
-                  Author
-                </Typography>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        <Card shadow={false} className="p-0">
-          <CardBody className="p-0 pb-5">
-            <Typography
-              variant="h3"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Desayuno
-            </Typography>
-            <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
-              Investigate the emerging field of epigenetics and its impact on
-              understanding how environmental factors can influence gene
-              expression and inheritance.
-            </Typography>
-            <div className="flex items-center gap-3">
-              <div className="">
-                <Image
-                  width={256}
-                  height={256}
-                  src="/image/avatar2.jpg"
-                  className="w-12 object-cover h-12 rounded-lg"
-                  alt="photo"
-                />
-              </div>
-              <div>
-                <Typography className="!font-bold !text-sm text-gray-900">
-                  Mathew Glock
-                </Typography>
-                <Typography className="!font-normal !text-xs text-gray-500">
-                  Author
-                </Typography>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        <Card shadow={false} className="p-0">
-          <CardBody className="p-0 pb-5">
-            <Typography
-              variant="h3"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Desayuno
-            </Typography>
-            <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
-              Investigate the emerging field of epigenetics and its impact on
-              understanding how environmental factors can influence gene
-              expression and inheritance.
-            </Typography>
-            <div className="flex items-center gap-3">
-              <div className="">
-                <Image
-                  width={256}
-                  height={256}
-                  src="/image/avatar2.jpg"
-                  className="w-12 object-cover h-12 rounded-lg"
-                  alt="photo"
-                />
-              </div>
-              <div>
-                <Typography className="!font-bold !text-sm text-gray-900">
-                  Mathew Glock
-                </Typography>
-                <Typography className="!font-normal !text-xs text-gray-500">
-                  Author
-                </Typography>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        <Card shadow={false} className="p-0">
-          <CardBody className="p-0 pb-5">
-            <Typography
-              variant="h3"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Desayuno
-            </Typography>
-            <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
-              Investigate the emerging field of epigenetics and its impact on
-              understanding how environmental factors can influence gene
-              expression and inheritance.
-            </Typography>
-            <div className="flex items-center gap-3">
-              <div className="">
-                <Image
-                  width={256}
-                  height={256}
-                  src="/image/avatar2.jpg"
-                  className="w-12 object-cover h-12 rounded-lg"
-                  alt="photo"
-                />
-              </div>
-              <div>
-                <Typography className="!font-bold !text-sm text-gray-900">
-                  Mathew Glock
-                </Typography>
-                <Typography className="!font-normal !text-xs text-gray-500">
-                  Author
-                </Typography>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        <Card shadow={false} className="p-0">
-          <CardBody className="p-0 pb-5">
-            <Typography
-              variant="h3"
-              className="leading-[45px] mb-4 !text-gray-900 "
-            >
-              Desayuno
-            </Typography>
-            <Typography className="text-normal mb-4 !text-base text-blue-gray-500 ">
-              Investigate the emerging field of epigenetics and its impact on
-              understanding how environmental factors can influence gene
-              expression and inheritance.
-            </Typography>
-            <div className="flex items-center gap-3">
-              <div className="">
-                <Image
-                  width={256}
-                  height={256}
-                  src="/image/avatar2.jpg"
-                  className="w-12 object-cover h-12 rounded-lg"
-                  alt="photo"
-                />
-              </div>
-              <div>
-                <Typography className="!font-bold !text-sm text-gray-900">
-                  Mathew Glock
-                </Typography>
-                <Typography className="!font-normal !text-xs text-gray-500">
-                  Author
-                </Typography>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
       </div>
+
       <div className="mt-10 gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <div className=" md:border-r px-3 border-blue-gray-100">
           <div className="!border-b  border-blue-gray-100 mb-5">
