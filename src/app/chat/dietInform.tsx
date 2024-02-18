@@ -24,7 +24,7 @@ function DesayunoCard({ title, content, colorBase, colorSecundario }: Props) {
     };
 
     return (
-        <div className={`bg-gradient-to-r from-teal-400 to-${colorSecundario} rounded-lg shadow-md p-4`}>
+        <div className={`bg-gradient-to-r from-teal-400 to-${colorBase} rounded-lg shadow-md p-4`}>
             <Typography
                 variant="h3"
                 className="leading-[45px] mb-4 !text-white "
