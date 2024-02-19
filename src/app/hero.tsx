@@ -10,21 +10,21 @@ function Hero() {
     <div className="grid min-h-screen px-8">
       <div className="container relative z-10 my-auto mx-auto grid place-items-center text-center">
         <Typography variant="h1" color="white">
-        Exploring the benefits of good nutrition...
+        Explora los beneficios de una buena nutrición 
         </Typography>
         <Typography
           variant="lead"
           color="white"
           className="mt-4 mb-12 w-full md:max-w-full lg:max-w-3xl"
         >
-          Introduction: Join us in a a journey into the world of life!
+          Encuentra en nuestro portal una herramienta para mejorar tus habitos alimenticios
         </Typography>
         <Typography
           variant="paragraph"
           color="white"
           className="mt-1 mb-7 font-medium uppercase"
         >
-          Connect with us on:
+          Contactanos:
         </Typography>
         <div className="gap-8 flex">
           <IconButton variant="text" color="white" size="sm">

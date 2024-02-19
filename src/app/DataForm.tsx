@@ -7,7 +7,6 @@ import {
 import { Button, Card, CardBody, Dialog, DialogBody, DialogHeader, Input, Option, Select, Typography } from "@material-tailwind/react";
 import Image from "next/image";
 import React, { useState } from "react";
-
 import BlogCardWithImage from "@/components/blog-card-with-image";
 import SimpleBlogCard from "@/components/simple-blog-card";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
@@ -15,6 +14,7 @@ import { GrUser } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
 import { fetchDiet } from "./api/api";
 import { DesayunoCard } from "./dietInform";
+import { useSession } from "next-auth/react";
 
 interface Menu {
   desayuno: string;
@@ -225,11 +225,13 @@ const DataForm = () => {
     }
   }
 
-
+  const {data: session}  = useSession()
 
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
+      { session?.user ? 
+        <>
       <div className="my-5 w-full mx-10">
 
         <div className="flex items-center justify-center">
@@ -435,8 +437,12 @@ const DataForm = () => {
         </div>
 
       </div>
-   
+    </>
+    :
+    <></>        
+    }
     </section>
+ 
   );
 }
 

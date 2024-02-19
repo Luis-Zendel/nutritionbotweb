@@ -11,7 +11,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signIn, signOut} from 'next-auth/react'
 import { useSession } from "next-auth/react";
 
-const NAV_MENU = ["Home", "About Us", "Contact Us"];
+const NAV_MENU = ["Inicio", "Acerca de nosotros", "Comparte tu experiencia"];
 
 function NavItem({ children }: { children: React.ReactNode }) {
   return (
@@ -74,7 +74,7 @@ export function Navbar() {
           className="text-lg font-bold"
           color={isScrolling ? "blue-gray" : "white"}
         >
-          Material Tailwind
+          NUTRITION BOT
         </Typography>
         <ul
           className={`ml-10 hidden items-center gap-6 lg:flex ${

@@ -88,6 +88,13 @@ const ComingSoon = () => {
                     </div>
                 </article>
             </section>
+            <div className='flex w-full mt-4'>
+            <Button className="gap-3 max-w-max mt-3 mx-auto ">
+                        <Typography variant='small' className='max-w-max' >
+                            Crea tu propia dieta con IA 
+                        </Typography>
+                    </Button>
+                    </div>
 
         </section>
     )
