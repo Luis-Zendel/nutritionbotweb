@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Navbar as MTNavbar,
@@ -7,6 +8,8 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { signIn, signOut} from 'next-auth/react'
+import { useSession } from "next-auth/react";
 
 const NAV_MENU = ["Home", "About Us", "Contact Us"];
 
@@ -26,6 +29,8 @@ function NavItem({ children }: { children: React.ReactNode }) {
 }
 
 export function Navbar() {
+  const {data: session}  = useSession()
+  console.log(session)
   const [open, setOpen] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
   function handleOpen() {
@@ -80,14 +85,18 @@ export function Navbar() {
             <NavItem key={name}>{name}</NavItem>
           ))}
         </ul>
-        <div className="hidden items-center gap-2 lg:flex">
+        {session?.user ? ( <div className="hidden items-center gap-2 lg:flex">
           <Button variant="text" color={isScrolling ? "gray" : "white"}>
-            Log in
+            {session.user.name}
           </Button>
-          <a href="https://www.material-tailwind.com/blocks" target="_blank">
-            <Button color={isScrolling ? "gray" : "white"}>blocks</Button>
-          </a>
-        </div>
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signOut()}>Cerrar Sesión</Button>
+        </div>)
+        :
+        (<div className="hidden items-center gap-2 lg:flex">
+          
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signIn()}>Iniciar Sesión</Button>
+        </div>)
+        }
         <IconButton
           variant="text"
           onClick={handleOpen}
@@ -109,10 +118,17 @@ export function Navbar() {
             ))}
           </ul>
           <div className="mt-6 flex items-center gap-2">
-            <Button variant="text">Log in</Button>
-            <a href="https://www.material-tailwind.com/blocks" target="_blank">
-              <Button color="gray">blocks</Button>
-            </a>
+          {session?.user ? ( <div className="hidden items-center gap-2 lg:flex">
+          <Button variant="text" color={isScrolling ? "gray" : "white"}>
+            {session.user.name}
+          </Button>
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signOut()}>Cerrar Sesión</Button>
+        </div>)
+        :
+        (<div className="hidden items-center gap-2 lg:flex">
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signIn()}>Iniciar Sesión</Button>
+        </div>)
+        }
           </div>
         </div>
       </Collapse>
