@@ -16,6 +16,7 @@ import { IoWarningOutline } from "react-icons/io5";
 import { fetchDiet } from "../api/api";
 import { DesayunoCard } from "./dietInform";
 import { signIn } from 'next-auth/react'
+import { useSession } from "next-auth/react";
 
 
 interface Menu {
@@ -87,6 +88,7 @@ const menu: Menu = {
 
 
 const DataForm = () => {
+  const {data: session}  = useSession();
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
@@ -182,10 +184,13 @@ const DataForm = () => {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
-      const postData = {
-        name: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
-        time: "Wed, 21 Oct 2015 18:27:50 GMT",
-      }
+            const postData = {
+              name: '',
+              email: session?.user?.email! ,
+              prompt: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
+              time: "Wed, 21 Oct 2015 18:27:50 GMT",
+            }
+
       console.log(postData.name);
       const result = await fetchDiet(url, postData);
       console.log("Se recibio resultado ");

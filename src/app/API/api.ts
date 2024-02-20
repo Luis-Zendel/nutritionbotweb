@@ -1,5 +1,7 @@
 type userData = {
     name: string,
+    email: string,
+    prompt: string,
     time: string,
 }
 
