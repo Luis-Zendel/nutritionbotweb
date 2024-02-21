@@ -4,18 +4,15 @@ import {
   ChatBubbleOvalLeftEllipsisIcon,
   PlayCircleIcon,
 } from "@heroicons/react/24/solid";
-import { Button, Card, CardBody, Dialog, DialogBody, DialogHeader, Input, Option, Select, Typography } from "@material-tailwind/react";
-import Image from "next/image";
+import { Button, Dialog, DialogBody, DialogHeader, Input, Option, Select, Typography } from "@material-tailwind/react";
+import { useSession } from "next-auth/react";
 import React, { useState } from "react";
-import BlogCardWithImage from "@/components/blog-card-with-image";
-import SimpleBlogCard from "@/components/simple-blog-card";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 import { IoWarningOutline } from "react-icons/io5";
+
 import { fetchDiet } from "./api/api";
 import { DesayunoCard } from "./dietInform";
-import { useSession } from "next-auth/react";
-import { string } from "zod";
 
 interface Menu {
   desayuno: string;
@@ -86,7 +83,7 @@ const menu: Menu = {
 
 
 const DataForm = () => {
-  const {data: session}  = useSession();
+  const { data: session } = useSession();
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
@@ -178,6 +175,7 @@ const DataForm = () => {
     try {
       console.log(`Se genero la peticion con:`);
       const url = "http://127.0.0.1:8000/api/generate/diet";
+  
       /*       const postData = {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
@@ -188,10 +186,20 @@ const DataForm = () => {
         prompt: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
         time: "Wed, 21 Oct 2015 18:27:50 GMT",
       }
-      console.log(postData.name);
+
+      console.log(postData);
       const result = await fetchDiet(url, postData);
-      console.log("Se recibio resultado ");
-      setDiet(result);
+
+      if (result.success) {
+        console.log("Se recibio resultado ");
+        setDiet(result.data);
+      } else {
+        setOpenDialog(true);
+        setDialogInfo({
+          title: "¡Has generado muchas dietas!",
+          message: "Has alcanzado el límite de peticiones para la generación de dietas. Intenta de nuevo más tarde."
+        });
+      }
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
     }
@@ -233,219 +241,219 @@ const DataForm = () => {
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
-      { session?.user ? 
+      {session?.user ?
         <>
-      <div className="my-5 w-full mx-10">
+          <div className="my-5 w-full mx-10">
 
-        <div className="flex items-center justify-center">
-          <Typography
-            variant="h1"
-            className="leading-[45px] mb-4 !text-gray-900 "
-          >
-            Formulario
-          </Typography>
-        </div>
-
-        <form className="w-full mx-auto max-w-3xl">
-
-          <Typography
-            variant="h4"
-            className="leading-[45px] mb-4 !text-gray-900 "
-          >
-            Nombre:
-          </Typography>
-          <Input variant="static" label="Nombre" placeholder="" onChange={e => isInputValid(e, setName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name} />
-
-          <div className="w-full grid mt-3 grid-cols-1">
-            <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
-              <div className="w-full sm:max-w-60">
-                <Typography
-                  variant="h6"
-                  className="leading-[45px] mb-4 !text-gray-900"
-                >
-                  Edad:
-                </Typography>
-                <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => isInputValid(e, setAge, /^(100|[1-9]?[0-9])$/, "age")} error={inputErrors.age} crossOrigin={undefined} />
-              </div>
-
-              <div className="w-full sm:max-w-60">
-                <Typography
-                  variant="h6"
-                  className="leading-[45px] mb-4 !text-gray-900 "
-                >
-                  Estatura (cm):
-                </Typography>
-                <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => isInputValid(e, setHeight, /^([1-9]\d{0,2}|0)$/, "height")} error={inputErrors.height} crossOrigin={undefined} />
-              </div>
+            <div className="flex items-center justify-center">
+              <Typography
+                variant="h1"
+                className="leading-[45px] mb-4 !text-gray-900 "
+              >
+                Formulario
+              </Typography>
             </div>
 
-            <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
-              <div className="w-full sm:max-w-60">
-                <Typography
-                  variant="h6"
-                  className="leading-[45px] mb-4 !text-gray-900 "
-                >
-                  Peso (kg):
-                </Typography>
-                <Input variant="outlined" label="Peso" placeholder="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} crossOrigin={undefined} />
+            <form className="w-full mx-auto max-w-3xl">
+
+              <Typography
+                variant="h4"
+                className="leading-[45px] mb-4 !text-gray-900 "
+              >
+                Nombre:
+              </Typography>
+              <Input variant="static" label="Nombre" placeholder="" onChange={e => isInputValid(e, setName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} icon={<GrUser />} error={inputErrors.name} />
+
+              <div className="w-full grid mt-3 grid-cols-1">
+                <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
+                  <div className="w-full sm:max-w-60">
+                    <Typography
+                      variant="h6"
+                      className="leading-[45px] mb-4 !text-gray-900"
+                    >
+                      Edad:
+                    </Typography>
+                    <Input variant="outlined" label="Edad" placeholder="" icon={<GiAges />} onChange={e => isInputValid(e, setAge, /^(100|[1-9]?[0-9])$/, "age")} error={inputErrors.age} crossOrigin={undefined} />
+                  </div>
+
+                  <div className="w-full sm:max-w-60">
+                    <Typography
+                      variant="h6"
+                      className="leading-[45px] mb-4 !text-gray-900 "
+                    >
+                      Estatura (cm):
+                    </Typography>
+                    <Input variant="outlined" label="Estatura" placeholder="" icon={<GiPencilRuler />} onChange={e => isInputValid(e, setHeight, /^([1-9]\d{0,2}|0)$/, "height")} error={inputErrors.height} crossOrigin={undefined} />
+                  </div>
+                </div>
+
+                <div className="w-auto mx-1 grid grid-cols-1 sm:grid-cols-2">
+                  <div className="w-full sm:max-w-60">
+                    <Typography
+                      variant="h6"
+                      className="leading-[45px] mb-4 !text-gray-900 "
+                    >
+                      Peso (kg):
+                    </Typography>
+                    <Input variant="outlined" label="Peso" placeholder="" icon={<GiWeight />} onChange={e => isInputValid(e, setWeight, /^([1-9]\d{0,2}|0)$/, "weight")} error={inputErrors.weight} crossOrigin={undefined} />
+                  </div>
+
+                  <div className="w-full sm:max-w-60">
+                    <Typography
+                      variant="h6"
+                      className="leading-[45px] mb-4 !text-gray-900 "
+                    >
+                      Horas actividad física:
+                    </Typography>
+                    <Input variant="outlined" label="Horas actividad por semana" icon={<GiClockwork />} placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} crossOrigin={undefined} />
+                  </div>
+
+                </div>
               </div>
 
-              <div className="w-full sm:max-w-60">
+              <div>
                 <Typography
                   variant="h6"
-                  className="leading-[45px] mb-4 !text-gray-900 "
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
                 >
-                  Horas actividad física:
+                  Describe tu objetivo de la dieta:
                 </Typography>
-                <Input variant="outlined" label="Horas actividad por semana" icon={<GiClockwork />} placeholder="" onChange={e => isInputValid(e, setActivityHours, /^(0?|1?\d|2[0-4])$/, "activityHours")} error={inputErrors.activityHours} crossOrigin={undefined} />
+                <Select variant="static" onChange={e => isValueValid(e, setObjective, "objective")} name="objetivo" error={inputErrors.objective}>
+                  <Option value="perder peso">Perder peso</Option>
+                  <Option value="mantener peso">Mantener mi peso</Option>
+                  <Option value="ganar peso">Ganar peso</Option>
+                  <Option value="tonificar musculos">Tonificar músculos</Option>
+                  <Option value="mejorar salud general">Mejorar mi salud general</Option>
+                  <Option value="aumentar masa muscular">Aumentar masa muscular</Option>
+                  <Option value="controlar diabetes">Controlar la diabetes</Option>
+                  <Option value="mejorar rendimiento deportivo">Mejorar rendimiento deportivo</Option>
+                  {/* Agrega más opciones según sea necesario */}
+                </Select>
+
               </div>
 
-            </div>
+              <div>
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                >
+                  El nivel de actividad física que realizas:
+                </Typography>
+                <Select variant="static" onChange={e => isValueValid(e, setPhysicalActivity, "physicalActivity")} name="nivel_actividad_fisica" error={inputErrors.physicalActivity}>
+                  <Option value="sedentario">Sedentario (poco o ningún ejercicio)</Option>
+                  <Option value="ligero">Ligero (actividad ligera o caminar ligero)</Option>
+                  <Option value="moderado">Moderado (ejercicio moderado o deportes ligeros)</Option>
+                  <Option value="activo">Activo (actividad física regular o deportes intensos)</Option>
+                  <Option value="muy activo">Muy Activo (actividad física intensa o entrenamiento diario)</Option>
+                </Select>
+              </div>
+
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
+
+                <div>
+                  <Typography
+                    variant="h6"
+                    className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                  >
+                    ¿Tienes alguna enfermedad o padecimiento?:
+                  </Typography>
+                  <Select variant="static" onChange={e => isValueValid(e, setDiseases, "diseases")} name="enfermedad" error={inputErrors.diseases}>
+                    <Option value="No tengo ninguna enfermedad o padecimiento">Ninguna</Option>
+                    <Option value="Tengo diabetes">Diabetes</Option>
+                    <Option value="Tengo hipertensión">Hipertensión</Option>
+                    <Option value="Tengo colesterol alto">Colesterol alto</Option>
+                    <Option value="Tengo enfermedad cardíaca">Enfermedad cardíaca</Option>
+                    <Option value="Tengo alergias alimentarias">Alergias alimentarias</Option>
+                    {/* Agrega más opciones según sea necesario */}
+                  </Select>
+
+                </div>
+
+                <div>
+                  <Typography
+                    variant="h6"
+                    className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                  >
+                    Restricciones alimenticias:
+                  </Typography>
+                  <Select variant="static" onChange={e => isValueValid(e, setRestrictions, "restrictions")} name="restricciones_alimentarias" error={inputErrors.restrictions}>
+                    <Option value="No tengo ninguna restricción alimentaria">Ninguna</Option>
+                    <Option value="No puedo comer gluten">Gluten</Option>
+                    <Option value="No puedo comer lácteos">Lácteos</Option>
+                    <Option value="No puedo comer frutos secos">Frutos secos</Option>
+                    <Option value="No puedo comer mariscos">Mariscos</Option>
+                    <Option value="No puedo comer carne">Carne</Option>
+                    {/* Agrega más opciones según sea necesario */}
+                  </Select>
+
+                </div>
+              </div>
+
+            </form>
           </div>
+
+
+          <Button
+            color="gray"
+            className="mb-3"
+            size="sm"
+            onClick={() => {
+              handleGenereteDietClick();
+            }}
+          >
+            <Typography variant="h5" className="text-center" color="white">
+              Generar
+            </Typography>
+          </Button>
+
+          <Dialog open={openDialog} handler={() => setOpenDialog(!openDialog)}>
+            <DialogHeader>
+              <Typography variant="h3" className="flex items-center justify-start gap-2 text-black">
+                {dialogInfo.title}
+              </Typography>
+            </DialogHeader>
+            <DialogBody>
+              <Typography variant="h5" className="flex items-center justify-start gap-2 text-blue-gray-900">
+                <IoWarningOutline className="w-10 h-10 text-amber-400" />
+                {dialogInfo.message}
+              </Typography>
+            </DialogBody>
+          </Dialog>
+
+
+
+          <Typography variant="h3" className="text-center" color="blue-gray">
+            Plan Alimenticio
+          </Typography>
+          <Typography
+            variant="lead"
+            className="mt-2 mb-8 w-full text-center font-normal !text-gray-500 max-w-4xl"
+          >
+            ..
+          </Typography>
 
           <div>
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-0 !text-gray-900 mt-3"
-            >
-              Describe tu objetivo de la dieta:
-            </Typography>
-            <Select variant="static" onChange={e => isValueValid(e, setObjective, "objective")} name="objetivo" error={inputErrors.objective}>
-              <Option value="perder peso">Perder peso</Option>
-              <Option value="mantener peso">Mantener mi peso</Option>
-              <Option value="ganar peso">Ganar peso</Option>
-              <Option value="tonificar musculos">Tonificar músculos</Option>
-              <Option value="mejorar salud general">Mejorar mi salud general</Option>
-              <Option value="aumentar masa muscular">Aumentar masa muscular</Option>
-              <Option value="controlar diabetes">Controlar la diabetes</Option>
-              <Option value="mejorar rendimiento deportivo">Mejorar rendimiento deportivo</Option>
-              {/* Agrega más opciones según sea necesario */}
-            </Select>
 
-          </div>
 
-          <div>
-            <Typography
-              variant="h6"
-              className="leading-[45px] mb-0 !text-gray-900 mt-3"
-            >
-              El nivel de actividad física que realizas:
-            </Typography>
-            <Select variant="static" onChange={e => isValueValid(e, setPhysicalActivity, "physicalActivity")} name="nivel_actividad_fisica" error={inputErrors.physicalActivity}>
-              <Option value="sedentario">Sedentario (poco o ningún ejercicio)</Option>
-              <Option value="ligero">Ligero (actividad ligera o caminar ligero)</Option>
-              <Option value="moderado">Moderado (ejercicio moderado o deportes ligeros)</Option>
-              <Option value="activo">Activo (actividad física regular o deportes intensos)</Option>
-              <Option value="muy activo">Muy Activo (actividad física intensa o entrenamiento diario)</Option>
-            </Select>
-          </div>
-
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
-
-            <div>
-              <Typography
-                variant="h6"
-                className="leading-[45px] mb-0 !text-gray-900 mt-3"
-              >
-                ¿Tienes alguna enfermedad o padecimiento?:
-              </Typography>
-              <Select variant="static" onChange={e => isValueValid(e, setDiseases, "diseases")} name="enfermedad" error={inputErrors.diseases}>
-                <Option value="No tengo ninguna enfermedad o padecimiento">Ninguna</Option>
-                <Option value="Tengo diabetes">Diabetes</Option>
-                <Option value="Tengo hipertensión">Hipertensión</Option>
-                <Option value="Tengo colesterol alto">Colesterol alto</Option>
-                <Option value="Tengo enfermedad cardíaca">Enfermedad cardíaca</Option>
-                <Option value="Tengo alergias alimentarias">Alergias alimentarias</Option>
-                {/* Agrega más opciones según sea necesario */}
-              </Select>
-
+            <div className="flex flex-col items-center justify-center gap-4">
+              {Object.entries(diet).map(([title, content], index) => (
+                <DesayunoCard
+                  key={title}
+                  title={title}
+                  content={dividirOpciones(title as keyof Menu)}
+                  colorBase={coloresBase[index]}
+                  colorSecundario={coloresSecundarios[index]}
+                />
+              ))}
             </div>
 
-            <div>
-              <Typography
-                variant="h6"
-                className="leading-[45px] mb-0 !text-gray-900 mt-3"
-              >
-                Restricciones alimenticias:
-              </Typography>
-              <Select variant="static" onChange={e => isValueValid(e, setRestrictions, "restrictions")} name="restricciones_alimentarias" error={inputErrors.restrictions}>
-                <Option value="No tengo ninguna restricción alimentaria">Ninguna</Option>
-                <Option value="No puedo comer gluten">Gluten</Option>
-                <Option value="No puedo comer lácteos">Lácteos</Option>
-                <Option value="No puedo comer frutos secos">Frutos secos</Option>
-                <Option value="No puedo comer mariscos">Mariscos</Option>
-                <Option value="No puedo comer carne">Carne</Option>
-                {/* Agrega más opciones según sea necesario */}
-              </Select>
-
-            </div>
           </div>
-
-        </form>
-      </div>
-
-
-      <Button
-        color="gray"
-        className="mb-3"
-        size="sm"
-        onClick={() => {
-          handleGenereteDietClick();
-        }}
-      >
-        <Typography variant="h5" className="text-center" color="white">
-          Generar
-        </Typography>
-      </Button>
-
-      <Dialog open={openDialog} handler={() => setOpenDialog(!openDialog)}>
-        <DialogHeader>
-          <Typography variant="h3" className="flex items-center justify-start gap-2 text-black">
-            {dialogInfo.title}
-          </Typography>
-        </DialogHeader>
-        <DialogBody>
-          <Typography variant="h5" className="flex items-center justify-start gap-2 text-blue-gray-900">
-            <IoWarningOutline className="w-10 h-10 text-amber-400" />
-            {dialogInfo.message}
-          </Typography>
-        </DialogBody>
-      </Dialog>
-
-
-
-      <Typography variant="h3" className="text-center" color="blue-gray">
-        Plan Alimenticio
-      </Typography>
-      <Typography
-        variant="lead"
-        className="mt-2 mb-8 w-full text-center font-normal !text-gray-500 max-w-4xl"
-      >
-       ..
-      </Typography>
-
-      <div>
-
-
-        <div className="flex flex-col items-center justify-center gap-4">
-          {Object.entries(diet).map(([title, content], index) => (
-            <DesayunoCard
-              key={title}
-              title={title}
-              content={dividirOpciones(title as keyof Menu)}
-              colorBase={coloresBase[index]}
-              colorSecundario={coloresSecundarios[index]}
-            />
-          ))}
-        </div>
-
-      </div>
-    </>
-    :
-    <></>        
-    }
+        </>
+        :
+        <></>
+      }
     </section>
- 
+
   );
 }
 

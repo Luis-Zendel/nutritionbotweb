@@ -14,11 +14,21 @@ const fetchDiet = async (url: string, data: userData) => {
                 // Puedes agregar otros encabezados según sea necesario
             },
             body: JSON.stringify(data),
-        });
+        }); 
+
+
         if (!response.ok) {
             throw new Error("No se genero respuesta ");
         }
-        return await response.json();
+
+
+        const result = await response.json();
+
+        return {
+            success: response.status !== 200,
+            data: result
+        }
+
     } catch (error) {
         console.error("Error al realizar la solicitud:", error);
         throw error;
@@ -29,3 +39,4 @@ const fetchDiet = async (url: string, data: userData) => {
 export {
     fetchDiet
 };
+
