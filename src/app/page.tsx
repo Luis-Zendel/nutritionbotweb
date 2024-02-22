@@ -2,7 +2,7 @@
 
 // sections
 import { Footer, Navbar } from "@/components";
-import { DataForm } from ".";
+import { Comments, DataForm } from ".";
 import { ComingSoon } from "./ComingSoon";
 import Hero from "./hero";
 
@@ -13,6 +13,7 @@ export default function Campaign() {
       <Hero />
       <ComingSoon />
       <DataForm />
+      <Comments />
       <Footer />
     </>
   );

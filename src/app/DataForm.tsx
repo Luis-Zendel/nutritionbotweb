@@ -50,28 +50,6 @@ const coloresSecundarios = [
 ];
 
 
-
-const SIMPLE_CONTENT = [
-  {
-    title: "Podcasts",
-    icon: ChatBubbleOvalLeftEllipsisIcon,
-    subtitle: "An interview with Tesla founder.",
-    name: "By Alexa Rossa",
-  },
-  {
-    title: "Interviews",
-    icon: PlayCircleIcon,
-    subtitle: "Make $500k through small biz or raise it from family.",
-    name: "By Jonathan Silvia",
-  },
-  {
-    title: "Podcasts",
-    icon: ChatBubbleOvalLeftEllipsisIcon,
-    subtitle: "An interview with Tesla founder.",
-    name: "By Alexa Rossa",
-  },
-];
-
 const menu: Menu = {
   "almuerzo": "1. Opci\u00f3n 1: Pechuga de pollo a la plancha con ensalada de espinacas, tomates, pepinos y aderezo de vinagreta ligera.\n2. Opci\u00f3n 2: Salm\u00f3n a la parrilla con esp\u00e1rragos al vapor y quinoa.\n3. Opci\u00f3n 3: Ensalada de at\u00fan con lechuga, tomates, aguacate y aderezo bajo en grasa.",
   "antes_de_dormir": "1. Opci\u00f3n 1: Un pu\u00f1ado de almendras.\n2. Opci\u00f3n 2: Un yogur griego bajo en grasa.\n3. Opci\u00f3n 3: Una porci\u00f3n de queso cottage bajo en grasa.\n\nRecuerda que es importante mantenerse hidratado durante todo el d\u00eda, as\u00ed que no olvides beber suficiente agua. Adem\u00e1s, consulta con un profesional de la salud antes de comenzar cualquier dieta o programa de ejercicio para asegurarte de que sea adecuado para ti.",

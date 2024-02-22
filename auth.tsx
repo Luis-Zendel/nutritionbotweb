@@ -5,8 +5,6 @@ import {z} from 'zod'
 
 // Crear función para validar en la base de datos 
 
-
-
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [Credentials({

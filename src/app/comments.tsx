@@ -1,53 +1,88 @@
 "use client";
 
-import React from "react";
-import { Typography } from "@material-tailwind/react";
+import { Button, Input, Typography } from "@material-tailwind/react";
+import { GrFacebook, GrInstagram, GrTwitter } from "react-icons/gr";
 
-import CommentCard from "@/components/comment-card";
-import { NewComment } from "@/components/new-comment";
-
-const COMMENTS = [
-  {
-    img: "/image/avatar1.jpg",
-    name: "Tina Andrew",
-    hours: " · 7 minutes ago",
-    desc: "Chance too good. God level bars. I'm so proud of @LifeOfDesiigner #1 song in the country. Panda! Don't be scared of the truth because we need to restart the human foundation in truth I stand with the most humility. We are so blessed!All praises and blessings to the families of people who never gave up on dreams. Don't forget, You're Awesome! ",
-  },
-  {
-    img: "/image/avatar2.jpg",
-    name: "Emma Roberts",
-    hours: " · 2 hours ago",
-    desc: "Hello guys, nice to have you on the platform! There will be a lot of great stuff coming soon. We will keep you posted for the latest news.Don't forget, You're awesome!",
-  },
-];
 
 export function Comments() {
   return (
-    <section className="w-full max-w-2xl mx-auto flex flex-col px-5 pb-20">
-      <Typography variant="h4" className=" md:text-center" color="blue-gray">
-        3 Comments
-      </Typography>
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-1">
-        {COMMENTS.map((props, idx) => (
-          <CommentCard key={idx} {...props} />
-        ))}
-        <div className="md:pl-14">
-          <CommentCard
-            desc="nice to have you on the platform! There will be a lot of great stuff coming soon. We will keep you posted for the latest news.Don't forget, You're awesome!"
-            img="/image/avatar1.jpg"
-            name="Tina Andrew "
-            hours=" · 2 hours ago"
-          />
+    <section className="py-12 w-full max-w-6xl self-center mx-auto">
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="flex flex-col w-full mb-10">
+          <Typography variant="lead" className="text-gray-600 font-medium mb-2">
+            Contáctanos
+          </Typography>
+          <Typography variant="h3" className="mb-5">
+            ¿Tienes dudas o aclaraciones?
+          </Typography>
+          <Typography variant="paragraph" >
+            Ponte en contácto con nosotros, envía tu comentario por este medio.
+          </Typography>
+          <div className="gap-8 flex mx-auto mt-5">
+            <div className="rounded hover:bg-gray-200 transition-all">
+              <GrFacebook className="text-black w-8 h-8 fill-black transition-all m-1" />
+            </div>
+
+            <div className="rounded hover:bg-gray-200 transition-all">
+              <GrInstagram className="text-black w-8 h-8 fill-black transition-all m-1" />
+
+            </div>
+
+            <div className="rounded hover:bg-gray-200 transition-all">
+              <GrTwitter className="text-black w-8 h-8 fill-black transition-all m-1" />
+            </div>
+
+          </div>
+
         </div>
+
+        <form action="" method="">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+              <Input
+                variant="static"
+                label="Nombre:"
+                placeholder=""
+                crossOrigin={undefined}
+              />
+            </div>
+
+            <div>
+              <Input
+                variant="static"
+                label="Correo:"
+                placeholder=""
+                crossOrigin={undefined}
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block mb-2 text-blue-gray-600">
+              Mensaje:
+            </label>
+            <textarea
+              id="mensaje"
+              name="mensaje"
+              className="w-full border border-blue-gray-200 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-black h-36 transition-all"
+              placeholder="Ingresa tu comentario o sugerencía aqui. "
+              style={{
+                resize: 'none',
+              }}
+            ></textarea>
+          </div>
+
+          <div className="w-full flex items-center justify-center">
+            <Button className="gap-3 max-w-max mt-3 mx-auto">
+              <Typography variant='small' className='max-w-max' >
+                Enviar comentario
+              </Typography>
+            </Button>
+          </div>
+
+        </form>
+
       </div>
-      <Typography
-        variant="h4"
-        className="my-6 md:my-14 md:text-center"
-        color="blue-gray"
-      >
-        Post Your Comment
-      </Typography>
-      <NewComment />
     </section>
   );
 }
