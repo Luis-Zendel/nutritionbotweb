@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  ChatBubbleOvalLeftEllipsisIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/24/solid";
-import { Button, Dialog, DialogBody, DialogHeader, Input, Option, Select, Typography } from "@material-tailwind/react";
+import { Button, Input, Menu, Option, Select, Typography } from "@material-tailwind/react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
-import { IoWarningOutline } from "react-icons/io5";
 
 import { fetchDiet } from "./api/api";
-import { DesayunoCard } from "./dietInform";
+import { useDietContext } from "./context/usediet";
+import DialogInfo from "./dialogInfo";
 
 interface Menu {
   desayuno: string;
@@ -22,32 +18,6 @@ interface Menu {
   cena: string;
   antes_de_dormir: string;
 }
-
-const coloresBase = [
-  "teal-400",
-  "pink-400",
-  "purple-400",
-  "indigo-400",
-  "blue-400",
-  "cyan-400",
-  "light-blue-400",
-  "teal-300",
-  "green-400",
-  "lime-400",
-];
-
-const coloresSecundarios = [
-  "amber-400",
-  "orange-400",
-  "deep-orange-400",
-  "red-400",
-  "purple-400",
-  "indigo-400",
-  "blue-400",
-  "cyan-400",
-  "light-blue-400",
-  "teal-300",
-];
 
 
 const menu: Menu = {
@@ -62,6 +32,7 @@ const menu: Menu = {
 
 const DataForm = () => {
   const { data: session } = useSession();
+
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
@@ -87,14 +58,7 @@ const DataForm = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({ title: "", message: "" });
 
-  const [diet, setDiet] = useState({
-    almuerzo: "",
-    antes_de_dormir: "",
-    cena: "",
-    desayuno: "",
-    media_manana: "",
-    media_tarde: "",
-  });
+  const { diet, setDiet } = useDietContext();
 
   const userData = {
     name,
@@ -108,16 +72,6 @@ const DataForm = () => {
     restrictions,
   }
 
-
-  // Convertir el JSON en un objeto con arrays de opciones
-  function dividirOpciones(comida: keyof Menu): string[] {
-    // Dividir la cadena de opciones usando el salto de línea como separador
-    const opciones = menu[comida].split('\n');
-    while (opciones.length >= 4) opciones.pop();
-    // Filtrar las opciones válidas y eliminar los números de las opciones
-    const opcionesFiltradas = opciones.filter(opcion => opcion.trim() !== '').map(opcion => opcion.replace(/^\d+\. /, ''));
-    return opcionesFiltradas;
-  }
 
   const validateInputsFilled = () => {
     let allFieldsFilled = true;
@@ -153,8 +107,8 @@ const DataForm = () => {
     try {
       console.log(`Se genero la peticion con:`);
       const url = "http://127.0.0.1:8000/api/generate/diet";
-  
-      /*       const postData = {
+
+      /*       41const postData = {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
@@ -166,6 +120,11 @@ const DataForm = () => {
       }
 
       console.log(postData);
+
+      //******************************************************
+      setDiet(menu); //Valor quemado hasta que se tenga la API
+      console.log(diet);
+
       const result = await fetchDiet(url, postData);
 
       if (result.success) {
@@ -218,7 +177,7 @@ const DataForm = () => {
 
 
   return (
-    <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
+    <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
       {session?.user ?
         <>
           <div className="my-5 w-full mx-10">
@@ -384,48 +343,13 @@ const DataForm = () => {
             </Typography>
           </Button>
 
-          <Dialog open={openDialog} handler={() => setOpenDialog(!openDialog)}>
-            <DialogHeader>
-              <Typography variant="h3" className="flex items-center justify-start gap-2 text-black">
-                {dialogInfo.title}
-              </Typography>
-            </DialogHeader>
-            <DialogBody>
-              <Typography variant="h5" className="flex items-center justify-start gap-2 text-blue-gray-900">
-                <IoWarningOutline className="w-10 h-10 text-amber-400" />
-                {dialogInfo.message}
-              </Typography>
-            </DialogBody>
-          </Dialog>
-
-
-
           <Typography variant="h3" className="text-center" color="blue-gray">
             Plan Alimenticio
           </Typography>
-          <Typography
-            variant="lead"
-            className="mt-2 mb-8 w-full text-center font-normal !text-gray-500 max-w-4xl"
-          >
-            ..
-          </Typography>
-
-          <div>
 
 
-            <div className="flex flex-col items-center justify-center gap-4">
-              {Object.entries(diet).map(([title, content], index) => (
-                <DesayunoCard
-                  key={title}
-                  title={title}
-                  content={dividirOpciones(title as keyof Menu)}
-                  colorBase={coloresBase[index]}
-                  colorSecundario={coloresSecundarios[index]}
-                />
-              ))}
-            </div>
+          <DialogInfo dialogInfo={dialogInfo} openDialog={openDialog} setOpenDialog={setOpenDialog} />
 
-          </div>
         </>
         :
         <></>

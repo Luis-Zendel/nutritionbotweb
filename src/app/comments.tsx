@@ -6,7 +6,7 @@ import { GrFacebook, GrInstagram, GrTwitter } from "react-icons/gr";
 
 export function Comments() {
   return (
-    <section className="py-12 w-full max-w-6xl self-center mx-auto">
+    <section className="w-full max-w-6xl self-center mx-auto mt-14">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-5">
         <div className="flex flex-col w-full mb-10">
           <Typography variant="lead" className="text-gray-600 font-medium mb-2">
