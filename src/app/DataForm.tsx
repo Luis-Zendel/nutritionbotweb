@@ -129,7 +129,7 @@ const DataForm = () => {
 
       if (result.success) {
         console.log("Se recibio resultado ");
-        setDiet(result.data);
+        setDiet(result.data.data);
       } else {
         setOpenDialog(true);
         setDialogInfo({

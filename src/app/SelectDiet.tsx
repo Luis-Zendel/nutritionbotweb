@@ -3,7 +3,7 @@ import { Option, Select } from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
 import { fetchListDiet, fetchSavedDiet } from './api/api';
 import { useDietContext } from './context/usediet';
-
+import { useSession } from 'next-auth/react';
 interface Menu {
     desayuno: string;
     media_manana: string;
@@ -19,13 +19,13 @@ interface SavedDiet {
 }
 
 const SelectDiet = () => {
-
+    const { data: session } = useSession();
     const { diet, setDiet } = useDietContext();
     const [savedDiets, setSavedDiets] = useState([] as Array<SavedDiet>);
 
     useEffect(() => {
         async function getListDiet() {
-            const list = await fetchListDiet();
+            const list = await fetchListDiet(session?.user?.email );
             if (list == undefined) {
                 return
             }
@@ -33,7 +33,7 @@ const SelectDiet = () => {
         }
 
         getListDiet();
-    }, [diet]);
+    }, [session]);
 
     const handleSelectDiet = async (value: string | undefined) => {
 

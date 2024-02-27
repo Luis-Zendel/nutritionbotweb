@@ -56,6 +56,8 @@ export const DietProvider = ({ children }: React.PropsWithChildren) => {
   // Convertir el JSON en un objeto con arrays de opciones
   function dividirOpciones(comida: keyof Menu): string[] {
     // Dividir la cadena de opciones usando el salto de línea como separador
+    console.log("Resultado:  ")
+    console.log(diet)
     const opciones = diet[comida].split('\n');
     while (opciones.length >= 4) opciones.pop();
     // Filtrar las opciones válidas y eliminar los números de las opciones

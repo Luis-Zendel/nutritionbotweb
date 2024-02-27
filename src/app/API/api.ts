@@ -34,14 +34,29 @@ const fetchDiet = async (url: string, data: userData) => {
     }
 };
 
-const fetchListDiet = async () => {
-    const URL = 'https://httpbin.org/status/200' //simula el comprtamiento de la API
+const fetchListDiet = async (email: any) => {
+    const URL = 'http://127.0.0.1:8000/api/getlist/diet' //simula el comprtamiento de la API
+    const dataPost = {
+        email: email
+    }
     try {
-        const response = await fetch(URL);
-
+        if(email){
+        const response = await fetch(URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // Puedes agregar otros encabezados según sea necesario
+            },
+            body: JSON.stringify(dataPost),
+        });
+        const result = await response.json()
+        console.log("Consulta lista de dietas")
+        console.log(result?.data)
+        console.log("new")
         if (!response) {
             throw new Error('No se generó respuesta');
         }
+    }
 
         //const result = await response.json();
 
