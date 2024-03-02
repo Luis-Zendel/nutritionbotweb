@@ -4,6 +4,12 @@ type userData = {
     prompt: string,
     time: string,
 }
+type dietData = {
+    name: string,
+    prompt: string,
+    email: string,
+    diet: any
+}
 
 const fetchDiet = async (url: string, data: userData) => {
     try {
@@ -33,9 +39,39 @@ const fetchDiet = async (url: string, data: userData) => {
         throw error;
     }
 };
+const fetchSaveDietPost = async (url: string, data: dietData) => {
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // Puedes agregar otros encabezados según sea necesario
+            },
+            body: JSON.stringify(data),
+        });
+
+
+        if (!response.ok) {
+            throw new Error("No se genero respuesta ");
+        }
+
+        const result = await response.json();
+
+        return {
+            success: response.status !== 200,
+            data: result
+        }
+
+    } catch (error) {
+        console.error("Error al realizar la solicitud:", error);
+        throw error;
+    }
+};
+
+
 
 const fetchListDiet = async (email: any) => {
-    const URL = 'http://127.0.0.1:8000/api/getlist/diet' //simula el comprtamiento de la API
+    const URL = 'https://chatbotapi-n32d.onrender.com/api/getlist/diet' //simula el comprtamiento de la API
     const dataPost = {
         email: email
     }
@@ -53,6 +89,7 @@ const fetchListDiet = async (email: any) => {
         console.log("Consulta lista de dietas")
         console.log(result?.data)
         console.log("new")
+        return result?.data
         if (!response) {
             throw new Error('No se generó respuesta');
         }
@@ -62,16 +99,7 @@ const fetchListDiet = async (email: any) => {
 
         //return result; //debería retornar esto
 
-        return [
-            {
-                id: 1,
-                title: '24-02-2024 perder peso'
-            },
-            {
-                id: 2,
-                "title": "24-02-2024 controlar diabetes",
-            },
-        ]
+        return []
 
     } catch (error) {
         console.error('Error en la solicitud');
@@ -111,7 +139,7 @@ const fetchSavedDiet = async (id: string) => {
 
 
 export {
-    fetchDiet, fetchListDiet, fetchSavedDiet
+    fetchDiet, fetchListDiet, fetchSavedDiet, fetchSaveDietPost
 };
 
 

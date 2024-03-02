@@ -6,10 +6,11 @@ import React, { useState } from "react";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 
-import { fetchDiet } from "./api/api";
+import { fetchDiet, fetchSaveDietPost } from "./api/api";
 import { useDietContext } from "./context/usediet";
 import DialogInfo from "./dialogInfo";
-
+import {API_URL} from "../../apiurl"
+import { UserData } from "next-auth/providers/42-school";
 interface Menu {
   desayuno: string;
   media_manana: string;
@@ -32,7 +33,7 @@ const menu: Menu = {
 
 const DataForm = () => {
   const { data: session } = useSession();
-
+  const [dietName, setDietName] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
@@ -42,6 +43,8 @@ const DataForm = () => {
   const [objective, setObjective] = useState("");
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [promptData, setPrompt] = useState("")
 
   const [inputErrors, setInputErrors] = useState({
     name: false,
@@ -88,9 +91,10 @@ const DataForm = () => {
 
 
   const handleGenereteDietClick = async () => {
-
+  
     const areNoErrors = Object.values(inputErrors).every(value => value === false);
     const areInputsFilled = validateInputsFilled();
+    setLoading(true)
 
     if (!areInputsFilled) {
       setOpenDialog(true);
@@ -106,30 +110,34 @@ const DataForm = () => {
 
     try {
       console.log(`Se genero la peticion con:`);
-      const url = "http://127.0.0.1:8000/api/generate/diet";
+      const url =  API_URL + "/api/generate/diet";
 
       /*       41const postData = {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
+      const promptText =`Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor. Toma el rol de un nutriologo con 20 años de experiencía para poder generar un plan.`
+      setPrompt(promptText)
       const postData = {
         name: '',
         email: session?.user?.email!,
-        prompt: `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.`,
+        prompt: promptText,
         time: "Wed, 21 Oct 2015 18:27:50 GMT",
       }
 
       console.log(postData);
 
       //******************************************************
-      setDiet(menu); //Valor quemado hasta que se tenga la API
+      //Valor quemado hasta que se tenga la API
       console.log(diet);
 
       const result = await fetchDiet(url, postData);
 
       if (result.success) {
         console.log("Se recibio resultado ");
+        console.log(result.data.data)
         setDiet(result.data.data);
+        setLoading(false)
       } else {
         setOpenDialog(true);
         setDialogInfo({
@@ -141,7 +149,6 @@ const DataForm = () => {
       console.error("Error al realizar la solicitud:", error);
     }
   };
-
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, dispatch: React.Dispatch<React.SetStateAction<string>>) => {
     dispatch(event.target.value);
@@ -174,6 +181,31 @@ const DataForm = () => {
     }
   }
 
+  const handleClickGuardar = async () => {
+    try { 
+      const url = API_URL + "/api/post/save/diet/user"
+    const document = {
+      name: dietName,
+      prompt: promptData,
+      email: session?.user?.email!,
+      diet: diet
+    }
+
+      const result = await fetchSaveDietPost(url, document);
+
+      if (result.success) {
+        setOpenDialog(true);
+        setDialogInfo({
+          title: "Dieta Guardad Exitosamente",
+          message: "Ha logrado alamacenar una dieta más"
+        });
+      } 
+      
+    }catch (error) {
+      console.error("Error al realizar la solicitud:", error);
+    }
+  }
+
 
 
   return (
@@ -188,6 +220,14 @@ const DataForm = () => {
                 className="leading-[45px] mb-4 !text-gray-900 "
               >
                 Formulario
+              </Typography>
+            </div>
+            <div className="flex items-center justify-center">
+              <Typography
+                variant="h6"
+                className="leading-[45px] mb-4 !text-gray-900 "
+              >
+                Lllena el siguiente formulario con tu información personal para generar un dieta perzonalizada. 
               </Typography>
             </div>
 
@@ -342,10 +382,34 @@ const DataForm = () => {
               Generar
             </Typography>
           </Button>
+          {loading ? <>
+            <Typography variant="h5" className="text-center" color="blue">
+            Su plan alimenticio esta generandoce por favor espere, esto puede tardar unos minutos
+          </Typography> 
+          </> :<>
+          {promptData ? 
+          <>
+           <Typography variant="h5" className="text-center" color="green">
+            Si desea almacenar su plan alimenticio generado para consultarlo más tarde por favor 
+          </Typography> 
+          <div className="flex mt-10 p-10 w-full items-center content-center">
+          <Input className=" mx-auto " variant="static" label="Nombre Plan Alimenticio" placeholder="" onChange={e => isInputValid(e, setDietName, /^[a-zA-ZñÑÇçáéíóúÁÉÍÓÚüÜ ]{2,20}$/, "name")} crossOrigin={undefined} error={inputErrors.name} />
+          <Button
+          color="gray"
+          className="mb-3"
+          size="sm"
+           onClick={()=>{handleClickGuardar()}}>Guardar</Button>
+          </div></>
+          : <></>}
+         
+       
+          </>}
 
-          <Typography variant="h3" className="text-center" color="blue-gray">
+          {diet.almuerzo != "" ? <Typography variant="h3" className="text-center" color="blue-gray">
             Plan Alimenticio
-          </Typography>
+          </Typography> :
+          <>
+          </>}
 
 
           <DialogInfo dialogInfo={dialogInfo} openDialog={openDialog} setOpenDialog={setOpenDialog} />
@@ -359,5 +423,5 @@ const DataForm = () => {
   );
 }
 
-export { DataForm };
+export default DataForm
 
