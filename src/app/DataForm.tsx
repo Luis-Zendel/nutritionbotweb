@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
 
-import { fetchDiet, fetchSaveDietPost } from "./apiapp/api";
+import { fetchDiet, fetchSaveDietPost } from "./api/api";
 import { useDietContext } from "./context/usediet";
 import DialogInfo from "./dialogInfo";
 import {API_URL} from "../../apiurl"
