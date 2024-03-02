@@ -1,7 +1,7 @@
 "use client"
 import { Option, Select, Button, Typography} from '@material-tailwind/react';
 import { useEffect, useState } from 'react';
-import { fetchListDiet, fetchSavedDiet } from './api/api';
+import { fetchListDiet, fetchSavedDiet } from './apiapp/api';
 import { useDietContext } from './context/usediet';
 import { useSession } from 'next-auth/react';
 interface Menu {
