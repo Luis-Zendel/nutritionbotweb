@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Button, Typography, Card, CardBody, Input } from "@material-tailwind/react";
+import { Button, Typography, Card, CardBody} from "@material-tailwind/react";
 import {
   ChatBubbleOvalLeftEllipsisIcon,
   PlayCircleIcon,
@@ -104,7 +104,7 @@ export function BlogPost() {
             >
               Nombre:
             </Typography>
-            <Input variant="static" label="Static" placeholder="Nombre" onChange={(e)=>{handleChangeNombre(e.target.value)}} />
+            <input variant="static" label="Static" placeholder="Nombre" onChange={(e)=>{handleChangeNombre(e.target.value)}} />
           <div className="w-full flex mt-3">
             <div className="w-1/2 mx-2">
             <Typography
@@ -113,14 +113,14 @@ export function BlogPost() {
             >
               Edad:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
             <Typography
               variant="h6"
               className="leading-[45px] mb-4 !text-gray-900 "
             >
               Estatura:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
 
 
             </div>
@@ -131,14 +131,14 @@ export function BlogPost() {
             >
               Peso:
             </Typography>
-            <Input variant="outlined" label="" placeholder=""  className=""/>
+            <input variant="outlined" label="" placeholder=""  className=""/>
             <Typography
               variant="h6"
               className="leading-[45px] mb-4 !text-gray-900 "
             >
               Peso:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
 
             </div>
           
@@ -150,7 +150,7 @@ export function BlogPost() {
             >
               Describe tu objetivo de la dieta
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
             <div className="w-full flex mt-3">
             <div className="w-1/2 mx-2">
             <Typography
@@ -159,14 +159,14 @@ export function BlogPost() {
             >
               Horas de actividad fisica por semana:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
             <Typography
               variant="h6"
               className="leading-[45px] mb-4 !text-gray-900 "
             >
               Estatura:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
 
 
             </div>
@@ -177,14 +177,14 @@ export function BlogPost() {
             >
               Peso:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
             <Typography
               variant="h6"
               className="leading-[45px] mb-4 !text-gray-900 "
             >
               Peso:
             </Typography>
-            <Input variant="outlined" label="" placeholder="" />
+            <input variant="outlined" label="" placeholder="" />
 
             </div>
           
