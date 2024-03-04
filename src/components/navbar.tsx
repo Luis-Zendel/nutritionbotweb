@@ -118,14 +118,14 @@ export function Navbar() {
             ))}
           </ul>
           <div className="mt-6 flex items-center gap-2">
-          {session?.user ? ( <div className="hidden items-center gap-2 lg:flex">
-          <Button variant="text" color={isScrolling ? "gray" : "white"}>
+          {session?.user ? ( <div className="items-center gap-2 lg:flex">
+          <Button variant="text" color="gray">
             {session.user.name}
           </Button>
             <Button color={isScrolling ? "gray" : "white"} onClick={ () => signOut()}>Cerrar Sesión</Button>
         </div>)
         :
-        (<div className="hidden items-center gap-2 lg:flex">
+        (<div className="items-center gap-2 lg:flex">
             <Button color={isScrolling ? "gray" : "white"} onClick={ () => signIn()}>Iniciar Sesión</Button>
         </div>)
         }
