@@ -71,7 +71,7 @@ const fetchSaveDietPost = async (url: string, data: dietData) => {
 
 
 const fetchListDiet = async (email: any) => {
-    const URL = 'http://127.0.0.1:8000/api/getlist/diet' //simula el comprtamiento de la API
+    const URL = 'https://chatbotapi-n32d.onrender.com/api/getlist/diet' //simula el comprtamiento de la API
     const dataPost = {
         email: email
     }
