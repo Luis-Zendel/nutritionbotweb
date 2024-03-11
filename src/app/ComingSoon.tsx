@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { BiFoodMenu } from 'react-icons/bi'
 import { BsCalendar2Heart } from 'react-icons/bs'
 import { FaUserDoctor } from 'react-icons/fa6'
+import { signIn, signOut} from 'next-auth/react'
 
 const ComingSoon = () => {
     return (
@@ -23,7 +24,7 @@ const ComingSoon = () => {
                         </Typography>
                     </div>
 
-                    <Button className="gap-3 max-w-max mt-3">
+                    <Button className="gap-3 max-w-max mt-3" onClick={()=>{signIn()}}>
                         <Typography variant='small' className='max-w-max' >
                             ¡Comienza Ahora!
                         </Typography>
