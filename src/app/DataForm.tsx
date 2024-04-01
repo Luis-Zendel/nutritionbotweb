@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Menu, Option, Select, Typography } from "@material-tailwind/react";
+import { Button, Checkbox, Input, Menu, Option, Select, Textarea, Typography } from "@material-tailwind/react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
@@ -33,6 +33,7 @@ const menu: Menu = {
 
 const DataForm = () => {
   const { data: session } = useSession();
+  const [activityCheck, setActivityCheck] = useState(false);
   const [dietName, setDietName] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
@@ -41,11 +42,11 @@ const DataForm = () => {
   const [activityHours, setActivityHours] = useState("");
   const [physicalActivity, setPhysicalActivity] = useState("");
   const [objective, setObjective] = useState("");
+  const [objectiveOther, setObjectiveOther] = useState("");
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
   const [loading, setLoading] = useState(false)
   const [promptData, setPrompt] = useState("")
-
   const [inputErrors, setInputErrors] = useState({
     name: false,
     age: false,
@@ -304,10 +305,23 @@ const DataForm = () => {
                   <Option value="aumentar masa muscular">Aumentar masa muscular</Option>
                   <Option value="controlar diabetes">Controlar la diabetes</Option>
                   <Option value="mejorar rendimiento deportivo">Mejorar rendimiento deportivo</Option>
+                  <Option value="otra">Otra</Option>
                   {/* Agrega más opciones según sea necesario */}
                 </Select>
 
               </div>
+              {objective == "otra" ? 
+              <div>
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                >
+                  Describe tu objetivo de la dieta:
+                </Typography>
+                <Textarea onChange={(e)=>isValueValid(e.target.value, setObjectiveOther, "objectiveOther")}/>
+
+              </div>: <>
+              </>}
 
               <div>
                 <Typography
@@ -324,6 +338,29 @@ const DataForm = () => {
                   <Option value="muy activo">Muy Activo (actividad física intensa o entrenamiento diario)</Option>
                 </Select>
               </div>
+
+              <div className="w-full">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                >
+                  Añadir descripción de actividad fisica 
+                </Typography>
+                <Checkbox crossOrigin={undefined} onChange={()=>{setActivityCheck(!activityCheck)}} label="Ingresa información "/>
+
+              </div>
+              {activityCheck ? 
+              <div>
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                >
+                  Describe tu actividad fisica:
+                </Typography>
+                <Textarea onChange={(e)=>isValueValid(e.target.value, setObjectiveOther, "objectiveOther")}/>
+
+              </div>: <>
+              </>}
 
               <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
 
