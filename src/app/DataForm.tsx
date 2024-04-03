@@ -43,6 +43,7 @@ const DataForm = () => {
   const [physicalActivity, setPhysicalActivity] = useState("");
   const [objective, setObjective] = useState("");
   const [objectiveOther, setObjectiveOther] = useState("");
+  const [medicines, setMedicines] = useState(false);
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
   const [loading, setLoading] = useState(false)
@@ -361,6 +362,16 @@ const DataForm = () => {
 
               </div>: <>
               </>}
+              <div className="w-full">
+                <Typography
+                  variant="h6"
+                  className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                >
+                  Consumo de medicamentos 
+                </Typography>
+                <Checkbox crossOrigin={undefined} onChange={()=>{setMedicines(!medicines)}} label="Ingresa información "/>
+
+              </div>
 
               <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
 
