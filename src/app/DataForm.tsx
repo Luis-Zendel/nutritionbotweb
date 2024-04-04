@@ -232,7 +232,7 @@ const DataForm = () => {
   };
 
   const onChangeDisiase = (value:any) => {
-    if(value.target.value == "otra"){
+    if(value.target.value == "Otra"){
       setdisiaseCount(-1)
     }else{
       isValueValid(value, setDiseases, "diseases")
