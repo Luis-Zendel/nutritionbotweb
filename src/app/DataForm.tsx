@@ -231,6 +231,14 @@ const DataForm = () => {
     }
   };
 
+  const onChangeDisiase = (value:any) => {
+    if(value.target.value == "otra"){
+      setdisiaseCount(-1)
+    }else{
+      isValueValid(value, setDiseases, "diseases")
+    }
+  }
+
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
       {session?.user ? (
@@ -512,7 +520,7 @@ const DataForm = () => {
                   </Typography>
                   <Select
                     variant="static"
-                    onChange={(e) => isValueValid(e, setDiseases, "diseases")}
+                    onChange={(e) => onChangeDisiase(e)}
                     name="enfermedad"
                     error={inputErrors.diseases}
                   >
@@ -583,7 +591,24 @@ const DataForm = () => {
                     </Select>
                   </div>
                 ))}
-                {}
+                {disiaseCount == -1 ? 
+                <div>
+                  <Typography
+                    variant="h6"
+                    className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                  >
+                    Describe tu condición medica:
+                  </Typography>
+                  <Textarea
+                    onChange={(e) =>
+                      isValueValid(
+                        e.target.value,
+                        setObjectiveOther,
+                        "objectiveOther"
+                      )
+                    }
+                  />
+                </div>:<></>}
               </div>
               <div className="w-full">
                 <Typography
@@ -606,7 +631,7 @@ const DataForm = () => {
                     variant="h6"
                     className="leading-[45px] mb-0 !text-gray-900 mt-3"
                   >
-                    Describe tu objetivo de la dieta:
+                    Escribe a continuación cuales son los medicamentos que consumes y bajo que fin:
                   </Typography>
                   <Textarea
                     onChange={(e) =>
