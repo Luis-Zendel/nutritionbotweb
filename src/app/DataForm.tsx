@@ -231,13 +231,13 @@ const DataForm = () => {
     }
   };
 
-  const onChangeDisiase = (value:any) => {
-    if(value.target.value == "Otra"){
-      setdisiaseCount(-1)
-    }else{
-      isValueValid(value, setDiseases, "diseases")
+  const onChangeDisiase = (value: any) => {
+    if (value.target.value == "Otra") {
+      setdisiaseCount(-1);
+    } else {
+      isValueValid(value, setDiseases, "diseases");
     }
-  }
+  };
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
@@ -510,7 +510,7 @@ const DataForm = () => {
                 <></>
               )}
 
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 md:gap-8">
+              <div className="w-full grid grid-cols-1 md:grid-cols-1 md:gap-8">
                 <div>
                   <Typography
                     variant="h6"
@@ -518,97 +518,53 @@ const DataForm = () => {
                   >
                     ¿Tienes alguna enfermedad o padecimiento?:
                   </Typography>
-                  <Select
-                    variant="static"
-                    onChange={(e) => onChangeDisiase(e)}
-                    name="enfermedad"
-                    error={inputErrors.diseases}
-                  >
-                    <Option value="No tengo ninguna enfermedad o padecimiento">
-                      Ninguna
-                    </Option>
-                    <Option value="Tengo diabetes">Diabetes</Option>
-                    <Option value="Tengo hipertensión">Hipertensión</Option>
-                    <Option value="Tengo colesterol alto">
-                      Colesterol alto
-                    </Option>
-                    <Option value="Tengo enfermedad cardíaca">
-                      Enfermedad cardíaca
-                    </Option>
-                    <Option value="Tengo alergias alimentarias">
-                      Alergias alimentarias
-                    </Option>
-                    <Option value="Otra">Otra</Option>
-                    {/* Agrega más opciones según sea necesario */}
-                  </Select>
+                  <Checkbox
+                    crossOrigin={undefined}
+                    value="No tengo ninguna enfermedad o padecimiento"
+                    label="Ninguna"
+                  />
+                  <Checkbox
+                    crossOrigin={undefined}
+                    value="Tengo diabetes"
+                    label="Diabetes"
+                  />
+                  <Checkbox
+                    crossOrigin={undefined}
+                    value="Tengo hipertensión"
+                    label="Hipertensión"
+                  />
+                  <Checkbox
+                    crossOrigin={undefined}
+                    value="Tengo colesterol alto"
+                    label="Colesterol alto"
+                  />
+                  <Checkbox
+                    crossOrigin={undefined}
+                    value="Tengo enfermedad cardíaca"
+                    label="Engermedad cardiaca"
+                  />
                 </div>
-                <div className="flex items-center content-center">
-                  <Button
-                    onClick={() => {
-                      setdisiaseCount(disiaseCount + 1);
-                    }}
-                  >
-                    +
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      if (disiaseCount > 0) {
-                        setdisiaseCount(disiaseCount - 1);
-                      }
-                    }}
-                    className="mx-2"
-                  >
-                    -
-                  </Button>
-                </div>
-                {Array.from({ length: disiaseCount }, (_, index) => (
-                  <div key={index}>
+                {disiaseCount == -1 ? (
+                  <div>
                     <Typography
                       variant="h6"
                       className="leading-[45px] mb-0 !text-gray-900 mt-3"
                     >
-                      Añade padecimiento:
+                      Describe tu condición medica:
                     </Typography>
-                    <Select
-                      variant="static"
-                      onChange={(e) => isValueValid(e, setDiseases, "diseases")}
-                      name="enfermedad"
-                      error={inputErrors.diseases}
-                    >
-                      <Option value="No tengo ninguna enfermedad o padecimiento">
-                        Ninguna
-                      </Option>
-                      <Option value="Tengo diabetes">Diabetes</Option>
-                      <Option value="Tengo hipertensión">Hipertensión</Option>
-                      <Option value="Tengo colesterol alto">
-                        Colesterol alto
-                      </Option>
-                      <Option value="Tengo enfermedad cardíaca">
-                        Enfermedad cardíaca
-                      </Option>
-                      
-                      {/* Agrega más opciones según sea necesario */}
-                    </Select>
+                    <Textarea
+                      onChange={(e) =>
+                        isValueValid(
+                          e.target.value,
+                          setObjectiveOther,
+                          "objectiveOther"
+                        )
+                      }
+                    />
                   </div>
-                ))}
-                {disiaseCount == -1 ? 
-                <div>
-                  <Typography
-                    variant="h6"
-                    className="leading-[45px] mb-0 !text-gray-900 mt-3"
-                  >
-                    Describe tu condición medica:
-                  </Typography>
-                  <Textarea
-                    onChange={(e) =>
-                      isValueValid(
-                        e.target.value,
-                        setObjectiveOther,
-                        "objectiveOther"
-                      )
-                    }
-                  />
-                </div>:<></>}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="w-full">
                 <Typography
@@ -631,7 +587,8 @@ const DataForm = () => {
                     variant="h6"
                     className="leading-[45px] mb-0 !text-gray-900 mt-3"
                   >
-                    Escribe a continuación cuales son los medicamentos que consumes y bajo que fin:
+                    Escribe a continuación cuales son los medicamentos que
+                    consumes y bajo que fin:
                   </Typography>
                   <Textarea
                     onChange={(e) =>
@@ -654,26 +611,36 @@ const DataForm = () => {
                 >
                   Restricciones alimenticias:
                 </Typography>
-                <Select
-                  variant="static"
-                  onChange={(e) =>
-                    isValueValid(e, setRestrictions, "restrictions")
-                  }
-                  name="restricciones_alimentarias"
-                  error={inputErrors.restrictions}
-                >
-                  <Option value="No tengo ninguna restricción alimentaria">
-                    Ninguna
-                  </Option>
-                  <Option value="No puedo comer gluten">Gluten</Option>
-                  <Option value="No puedo comer lácteos">Lácteos</Option>
-                  <Option value="No puedo comer frutos secos">
-                    Frutos secos
-                  </Option>
-                  <Option value="No puedo comer mariscos">Mariscos</Option>
-                  <Option value="No puedo comer carne">Carne</Option>
-                  {/* Agrega más opciones según sea necesario */}
-                </Select>
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Gluten"
+                />
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Lacteos"
+                />
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Frutos secos"
+                />
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Mariscos"
+                />
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Carne"
+                />
+                <Checkbox
+                  crossOrigin={undefined}
+                  value="Tengo hipertensión"
+                  label="Otras"
+                />
               </div>
             </form>
           </div>
