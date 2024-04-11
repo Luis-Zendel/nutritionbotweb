@@ -73,6 +73,16 @@ const DataForm = () => {
     diseases: false,
     restrictions: false,
   });
+  const [foodRestrictions, setFoodRestrictions] = useState({
+    ninguna: true,
+    gluten: false,
+    lacteos: false,
+    frutosSecos: false,
+    mariscos: false,
+    carne: false,
+    otra: false,
+    otraText: "",
+  });
 
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({ title: "", message: "" });
@@ -170,6 +180,63 @@ const DataForm = () => {
     } catch (error) {
       console.error("Error al realizar la solicitud:", error);
     }
+  };
+
+  const handleChangeRestrictions = (e: number) => {
+    const auxValue = foodRestrictions;
+    if (e == 0) {
+      if (!auxValue.ninguna) {
+        setFoodRestrictions({
+          ninguna: true,
+          gluten: false,
+          lacteos: false,
+          frutosSecos: false,
+          mariscos: false,
+          carne: false,
+          otra: false,
+          otraText: "",
+        });
+      }else {
+        setFoodRestrictions({
+          ninguna: false,
+          gluten: false,
+          lacteos: false,
+          frutosSecos: false,
+          mariscos: false,
+          carne: false,
+          otra: false,
+          otraText: "",
+        });
+      }
+    } else if (e == 1) {
+      auxValue.ninguna = false;
+      auxValue.gluten = !foodRestrictions.gluten;
+      setFoodRestrictions(auxValue);
+    } else if (e == 2) {
+      auxValue.ninguna = false;
+      auxValue.lacteos = !foodRestrictions.lacteos;
+      setFoodRestrictions(auxValue);
+    } else if (e == 3) {
+      auxValue.ninguna = false;
+      auxValue.frutosSecos = !foodRestrictions.frutosSecos;
+      setFoodRestrictions(auxValue);
+    } else if (e == 4) {
+      auxValue.ninguna = false;
+      auxValue.mariscos = !foodRestrictions.mariscos;
+      setFoodRestrictions(auxValue);
+    } else if (e == 5) {
+      auxValue.ninguna = false;
+      auxValue.carne = !foodRestrictions.carne;
+      setFoodRestrictions(auxValue);
+    } else if (e == 6) {
+      auxValue.ninguna = false;
+      auxValue.otra = !foodRestrictions.otra;
+      if (auxValue.otra == false) {
+        auxValue.otraText = "";
+      }
+      setFoodRestrictions(auxValue);
+    }
+    console.log(auxValue);
   };
 
   const handleChange = (
@@ -613,33 +680,46 @@ const DataForm = () => {
                 </Typography>
                 <Checkbox
                   crossOrigin={undefined}
+                  value={0}
+                  label="Ninguna"
+                  checked={foodRestrictions.ninguna}
+                  onClick={(e) => handleChangeRestrictions(0)}
+                />
+                <Checkbox
+                  crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Gluten"
+                  onChange={(e) => handleChangeRestrictions(1)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Lacteos"
+                  onChange={(e) => handleChangeRestrictions(2)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Frutos secos"
+                  onChange={(e) => handleChangeRestrictions(3)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Mariscos"
+                  onChange={(e) => handleChangeRestrictions(4)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Carne"
+                  onChange={(e) => handleChangeRestrictions(5)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
                   value="Tengo hipertensión"
                   label="Otras"
+                  onChange={(e) => handleChangeRestrictions(6)}
                 />
               </div>
             </form>
