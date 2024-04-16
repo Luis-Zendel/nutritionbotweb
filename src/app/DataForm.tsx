@@ -84,6 +84,15 @@ const DataForm = () => {
     otraText: "",
   });
 
+  const [ninguna, setNinguna] = useState(foodRestrictions.ninguna);
+  const [gluten, setGluten] = useState(foodRestrictions.gluten);
+  const [lacteos, setLacteos] = useState(foodRestrictions.lacteos);
+  const [frutosSecos, setFrutosSecos] = useState(foodRestrictions.frutosSecos);
+  const [mariscos, setMariscos] = useState(foodRestrictions.mariscos);
+  const [carne, setCarne] = useState(foodRestrictions.carne);
+  const [otra, setOtra] = useState(foodRestrictions.otra);
+  const [otraText, setOtraText] = useState(foodRestrictions.otraText);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({ title: "", message: "" });
 
@@ -185,7 +194,7 @@ const DataForm = () => {
   const handleChangeRestrictions = (e: number) => {
     const auxValue = foodRestrictions;
     if (e == 0) {
-      if (!auxValue.ninguna) {
+      if (foodRestrictions.ninguna == false) {
         setFoodRestrictions({
           ninguna: true,
           gluten: false,
@@ -196,7 +205,17 @@ const DataForm = () => {
           otra: false,
           otraText: "",
         });
-      }else {
+        setNinguna(true);
+        setGluten(false);
+        setLacteos(false);
+        setFrutosSecos(false);
+        setMariscos(false);
+        setCarne(false);
+        setOtra(false);
+        setOtraText("");
+      }
+      if (foodRestrictions.ninguna == true) {
+        setNinguna(false);
         setFoodRestrictions({
           ninguna: false,
           gluten: false,
@@ -209,34 +228,51 @@ const DataForm = () => {
         });
       }
     } else if (e == 1) {
+      setNinguna(false);
+
       auxValue.ninguna = false;
-      auxValue.gluten = !foodRestrictions.gluten;
+      auxValue.gluten = !auxValue.gluten;
+      setGluten(!gluten);
       setFoodRestrictions(auxValue);
     } else if (e == 2) {
+      setNinguna(false);
+
       auxValue.ninguna = false;
       auxValue.lacteos = !foodRestrictions.lacteos;
+      setLacteos(!lacteos);
       setFoodRestrictions(auxValue);
     } else if (e == 3) {
+      setNinguna(false);
+
       auxValue.ninguna = false;
       auxValue.frutosSecos = !foodRestrictions.frutosSecos;
+      setFrutosSecos(!frutosSecos);
       setFoodRestrictions(auxValue);
     } else if (e == 4) {
+      setNinguna(false);
+
       auxValue.ninguna = false;
       auxValue.mariscos = !foodRestrictions.mariscos;
+      setMariscos(!mariscos);
       setFoodRestrictions(auxValue);
     } else if (e == 5) {
+      setNinguna(false);
+
       auxValue.ninguna = false;
       auxValue.carne = !foodRestrictions.carne;
+      setCarne(carne);
       setFoodRestrictions(auxValue);
     } else if (e == 6) {
+      setNinguna(false);
       auxValue.ninguna = false;
       auxValue.otra = !foodRestrictions.otra;
       if (auxValue.otra == false) {
         auxValue.otraText = "";
       }
+      setOtra(!otra);
       setFoodRestrictions(auxValue);
     }
-    console.log(auxValue);
+    console.log(foodRestrictions);
   };
 
   const handleChange = (
@@ -246,9 +282,6 @@ const DataForm = () => {
     dispatch(event.target.value);
   };
 
-
-
-  
   const isInputValid = (
     event: React.ChangeEvent<HTMLInputElement>, //InputEvent
     dispatch: React.Dispatch<React.SetStateAction<string>>, //React update function
@@ -682,47 +715,49 @@ const DataForm = () => {
                   Restricciones alimenticias:
                 </Typography>
                 <Checkbox
+                  id="Ninguna"
                   crossOrigin={undefined}
-                  value={0}
                   label="Ninguna"
-                  checked={foodRestrictions.ninguna}
-                  onClick={(e) => handleChangeRestrictions(0)}
+                  checked={ninguna}
+                  onClick={() => handleChangeRestrictions(0)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Gluten"
-                  onChange={(e) => handleChangeRestrictions(1)}
+                  id="Gluten"
+                  checked={gluten}
+                  onClick={() => handleChangeRestrictions(1)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Lacteos"
-                  onChange={(e) => handleChangeRestrictions(2)}
+                  id="Lacteos"
+                  checked={lacteos}
+                  onChange={() => handleChangeRestrictions(2)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Frutos secos"
-                  onChange={(e) => handleChangeRestrictions(3)}
+                  checked={frutosSecos}
+                  onChange={() => handleChangeRestrictions(3)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Mariscos"
-                  onChange={(e) => handleChangeRestrictions(4)}
+                  checked={mariscos}
+                  onChange={() => handleChangeRestrictions(4)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Carne"
-                  onChange={(e) => handleChangeRestrictions(5)}
+                  checked={carne}
+                  onChange={() => handleChangeRestrictions(5)}
                 />
                 <Checkbox
                   crossOrigin={undefined}
-                  value="Tengo hipertensión"
                   label="Otras"
-                  onChange={(e) => handleChangeRestrictions(6)}
+                  checked={otra}
+                  onChange={() => handleChangeRestrictions(6)}
                 />
               </div>
             </form>
