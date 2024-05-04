@@ -6,6 +6,7 @@ import {
   Input,
   Menu,
   Option,
+  Radio,
   Select,
   Textarea,
   Typography,
@@ -18,8 +19,6 @@ import { GrUser } from "react-icons/gr";
 import { fetchDiet, fetchSaveDietPost } from "./api/api";
 import { useDietContext } from "./context/usediet";
 import DialogInfo from "./dialogInfo";
-import { API_URL } from "../../apiurl";
-import { UserData } from "next-auth/providers/42-school";
 interface Menu {
   desayuno: string;
   media_manana: string;
@@ -45,23 +44,31 @@ const menu: Menu = {
 
 const DataForm = () => {
   const { data: session } = useSession();
+
   const [activityCheck, setActivityCheck] = useState(false);
+  const [diseaseCheck, setDiseaseCheck] = useState(false);
+  const [medicinesCheck, setMedicinesCheck] = useState(false);
+  const [restrictionsCheck, setRestrictionsCheck] = useState(false);
+
   const [dietName, setDietName] = useState("");
+
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
+
   const [activityHours, setActivityHours] = useState("");
   const [physicalActivity, setPhysicalActivity] = useState("");
+  const [activityDescription, setActivityDescription] = useState("");
+
   const [objective, setObjective] = useState("");
-  const [objectiveOther, setObjectiveOther] = useState("");
-  const [medicines, setMedicines] = useState(false);
-  const [disiaseCount, setdisiaseCount] = useState(0);
-  const [medicinesValue, setMedicinesValue] = useState("");
+  const [medicines, setMedicines] = useState("");
   const [diseases, setDiseases] = useState("");
   const [restrictions, setRestrictions] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [promptData, setPrompt] = useState("");
+
   const [inputErrors, setInputErrors] = useState({
     name: false,
     age: false,
@@ -71,27 +78,10 @@ const DataForm = () => {
     physicalActivity: false,
     objective: false,
     diseases: false,
+    medicines: false,
+    activityDescription: false,
     restrictions: false,
   });
-  const [foodRestrictions, setFoodRestrictions] = useState({
-    ninguna: true,
-    gluten: false,
-    lacteos: false,
-    frutosSecos: false,
-    mariscos: false,
-    carne: false,
-    otra: false,
-    otraText: "",
-  });
-
-  const [ninguna, setNinguna] = useState(foodRestrictions.ninguna);
-  const [gluten, setGluten] = useState(foodRestrictions.gluten);
-  const [lacteos, setLacteos] = useState(foodRestrictions.lacteos);
-  const [frutosSecos, setFrutosSecos] = useState(foodRestrictions.frutosSecos);
-  const [mariscos, setMariscos] = useState(foodRestrictions.mariscos);
-  const [carne, setCarne] = useState(foodRestrictions.carne);
-  const [otra, setOtra] = useState(foodRestrictions.otra);
-  const [otraText, setOtraText] = useState(foodRestrictions.otraText);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogInfo, setDialogInfo] = useState({ title: "", message: "" });
@@ -107,6 +97,8 @@ const DataForm = () => {
     physicalActivity,
     objective,
     diseases,
+    medicines,
+    activityDescription,
     restrictions,
   };
 
@@ -191,90 +183,6 @@ const DataForm = () => {
     }
   };
 
-  const handleChangeRestrictions = (e: number) => {
-    const auxValue = foodRestrictions;
-    if (e == 0) {
-      if (foodRestrictions.ninguna == false) {
-        setFoodRestrictions({
-          ninguna: true,
-          gluten: false,
-          lacteos: false,
-          frutosSecos: false,
-          mariscos: false,
-          carne: false,
-          otra: false,
-          otraText: "",
-        });
-        setNinguna(true);
-        setGluten(false);
-        setLacteos(false);
-        setFrutosSecos(false);
-        setMariscos(false);
-        setCarne(false);
-        setOtra(false);
-        setOtraText("");
-      }
-      if (foodRestrictions.ninguna == true) {
-        setNinguna(false);
-        setFoodRestrictions({
-          ninguna: false,
-          gluten: false,
-          lacteos: false,
-          frutosSecos: false,
-          mariscos: false,
-          carne: false,
-          otra: false,
-          otraText: "",
-        });
-      }
-    } else if (e == 1) {
-      setNinguna(false);
-
-      auxValue.ninguna = false;
-      auxValue.gluten = !auxValue.gluten;
-      setGluten(!gluten);
-      setFoodRestrictions(auxValue);
-    } else if (e == 2) {
-      setNinguna(false);
-
-      auxValue.ninguna = false;
-      auxValue.lacteos = !foodRestrictions.lacteos;
-      setLacteos(!lacteos);
-      setFoodRestrictions(auxValue);
-    } else if (e == 3) {
-      setNinguna(false);
-
-      auxValue.ninguna = false;
-      auxValue.frutosSecos = !foodRestrictions.frutosSecos;
-      setFrutosSecos(!frutosSecos);
-      setFoodRestrictions(auxValue);
-    } else if (e == 4) {
-      setNinguna(false);
-
-      auxValue.ninguna = false;
-      auxValue.mariscos = !foodRestrictions.mariscos;
-      setMariscos(!mariscos);
-      setFoodRestrictions(auxValue);
-    } else if (e == 5) {
-      setNinguna(false);
-
-      auxValue.ninguna = false;
-      auxValue.carne = !foodRestrictions.carne;
-      setCarne(carne);
-      setFoodRestrictions(auxValue);
-    } else if (e == 6) {
-      setNinguna(false);
-      auxValue.ninguna = false;
-      auxValue.otra = !foodRestrictions.otra;
-      if (auxValue.otra == false) {
-        auxValue.otraText = "";
-      }
-      setOtra(!otra);
-      setFoodRestrictions(auxValue);
-    }
-    console.log(foodRestrictions);
-  };
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     dispatch: React.Dispatch<React.SetStateAction<string>>
@@ -334,13 +242,28 @@ const DataForm = () => {
     }
   };
 
-  const onChangeDisiase = (value: any) => {
-    if (value.target.value == "Otra") {
-      setdisiaseCount(-1);
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setConditions: React.Dispatch<React.SetStateAction<string>>
+  ) => {
+    const condition = event.target.value;
+    if (event.target.checked) {
+      // Agregar la condición al estado si se selecciona
+      setConditions((prevConditions) =>
+        prevConditions ? prevConditions + `, ${condition}` : condition
+      );
     } else {
-      isValueValid(value, setDiseases, "diseases");
+      // Eliminar la condición del estado si se deselecciona
+      setConditions((prevConditions) =>
+        prevConditions
+          .split(', ')
+          .filter((c) => c !== condition)
+          .join(', ')
+      );
     }
   };
+
+
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
@@ -527,15 +450,10 @@ const DataForm = () => {
                   variant="h6"
                   className="leading-[45px] mb-0 !text-gray-900 mt-3"
                 >
-                  Añadir descripción de actividad fisica
+                  ¿Quieres describir la actividad fisica que realizas?
                 </Typography>
-                <Checkbox
-                  crossOrigin={undefined}
-                  onChange={() => {
-                    setActivityCheck(!activityCheck);
-                  }}
-                  label="Ingresa información "
-                />
+                <Radio crossOrigin={undefined} name="Activity" label={'Si'} onChange={() => setActivityCheck(true)} />
+                <Radio crossOrigin={undefined} name="Activity" label={'No'} onChange={() => setActivityCheck(false)} defaultChecked />
               </div>
               {activityCheck ? (
                 <div>
@@ -549,8 +467,8 @@ const DataForm = () => {
                     onChange={(e) =>
                       isValueValid(
                         e.target.value,
-                        setObjectiveOther,
-                        "objectiveOther"
+                        setActivityDescription,
+                        "activityDescription"
                       )
                     }
                   />
@@ -603,8 +521,8 @@ const DataForm = () => {
                     onChange={(e) =>
                       isValueValid(
                         e.target.value,
-                        setObjectiveOther,
-                        "objectiveOther"
+                        setObjective,
+                        "objective"
                       )
                     }
                   />
@@ -615,76 +533,69 @@ const DataForm = () => {
 
               <div className="w-full grid grid-cols-1 md:grid-cols-1 md:gap-8">
                 <div>
-                  <Typography
-                    variant="h6"
-                    className="leading-[45px] mb-0 !text-gray-900 mt-3"
-                  >
-                    ¿Tienes alguna enfermedad o padecimiento?:
-                  </Typography>
-                  <Checkbox
-                    crossOrigin={undefined}
-                    value="No tengo ninguna enfermedad o padecimiento"
-                    label="Ninguna"
-                  />
-                  <Checkbox
-                    crossOrigin={undefined}
-                    value="Tengo diabetes"
-                    label="Diabetes"
-                  />
-                  <Checkbox
-                    crossOrigin={undefined}
-                    value="Tengo hipertensión"
-                    label="Hipertensión"
-                  />
-                  <Checkbox
-                    crossOrigin={undefined}
-                    value="Tengo colesterol alto"
-                    label="Colesterol alto"
-                  />
-                  <Checkbox
-                    crossOrigin={undefined}
-                    value="Tengo enfermedad cardíaca"
-                    label="Engermedad cardiaca"
-                  />
-                </div>
-                {disiaseCount == -1 ? (
-                  <div>
+                  <div className="w-full">
                     <Typography
                       variant="h6"
                       className="leading-[45px] mb-0 !text-gray-900 mt-3"
                     >
-                      Describe tu condición medica:
+                      ¿Tienes Algún Padecimiento Médico?
                     </Typography>
-                    <Textarea
-                      onChange={(e) =>
-                        isValueValid(
-                          e.target.value,
-                          setObjectiveOther,
-                          "objectiveOther"
-                        )
-                      }
-                    />
+                    <Radio crossOrigin={undefined} name="Disease" label={'Si'} onChange={() => setDiseaseCheck(true)} />
+                    <Radio crossOrigin={undefined} name="Disease" label={'No'} onChange={() => setDiseaseCheck(false)} defaultChecked />
                   </div>
-                ) : (
-                  <></>
-                )}
+                  {diseaseCheck ? (
+                    <div>
+                      <Typography
+                        variant="h6"
+                        className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                      >
+                        Selecciona el tipo de padecimiento que presentas:
+                      </Typography>
+                      <div className="w-full flex justify-evenly flex-wrap">
+                        <Checkbox
+                          crossOrigin={undefined}
+                          value="Tengo diabetes"
+                          label="Diabetes"
+                          onChange={e => handleCheckboxChange(e, setDiseases)}
+                        />
+                        <Checkbox
+                          crossOrigin={undefined}
+                          value="Tengo hipertensión"
+                          label="Hipertensión"
+                          onChange={e => handleCheckboxChange(e, setDiseases)}
+                        />
+                        <Checkbox
+                          crossOrigin={undefined}
+                          value="Tengo colesterol alto"
+                          label="Colesterol alto"
+                          onChange={e => handleCheckboxChange(e, setDiseases)}
+                        />
+                        <Checkbox
+                          crossOrigin={undefined}
+                          value="Tengo enfermedad cardíaca"
+                          label="Engermedad cardiaca"
+                          onChange={e => handleCheckboxChange(e, setDiseases)}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+
+                </div>
+
               </div>
               <div className="w-full">
                 <Typography
                   variant="h6"
                   className="leading-[45px] mb-0 !text-gray-900 mt-3"
                 >
-                  Consumo de medicamentos
+                  ¿Consumes algún medicamento?
                 </Typography>
-                <Checkbox
-                  crossOrigin={undefined}
-                  onChange={() => {
-                    setMedicines(!medicines);
-                  }}
-                  label="Ingresa información "
-                />
+                <Radio crossOrigin={undefined} name="Medicine" label={'Si'} onChange={() => setMedicinesCheck(true)} />
+                <Radio crossOrigin={undefined} name="Medicine" label={'No'} onChange={() => setMedicinesCheck(false)} defaultChecked />
               </div>
-              {medicines ? (
+              {medicinesCheck ? (
                 <div>
                   <Typography
                     variant="h6"
@@ -697,8 +608,8 @@ const DataForm = () => {
                     onChange={(e) =>
                       isValueValid(
                         e.target.value,
-                        setMedicinesValue,
-                        "medicinesValue"
+                        setMedicines,
+                        "medicines"
                       )
                     }
                   />
@@ -707,59 +618,64 @@ const DataForm = () => {
                 <></>
               )}
 
-              <div>
+              <div className="w-full">
                 <Typography
                   variant="h6"
                   className="leading-[45px] mb-0 !text-gray-900 mt-3"
                 >
-                  Restricciones alimenticias:
+                  ¿Tienes alguna restricción alimentaria?
                 </Typography>
-                <Checkbox
-                  id="Ninguna"
-                  crossOrigin={undefined}
-                  label="Ninguna"
-                  checked={ninguna}
-                  onClick={() => handleChangeRestrictions(0)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Gluten"
-                  id="Gluten"
-                  checked={gluten}
-                  onClick={() => handleChangeRestrictions(1)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Lacteos"
-                  id="Lacteos"
-                  checked={lacteos}
-                  onChange={() => handleChangeRestrictions(2)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Frutos secos"
-                  checked={frutosSecos}
-                  onChange={() => handleChangeRestrictions(3)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Mariscos"
-                  checked={mariscos}
-                  onChange={() => handleChangeRestrictions(4)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Carne"
-                  checked={carne}
-                  onChange={() => handleChangeRestrictions(5)}
-                />
-                <Checkbox
-                  crossOrigin={undefined}
-                  label="Otras"
-                  checked={otra}
-                  onChange={() => handleChangeRestrictions(6)}
-                />
+                <Radio crossOrigin={undefined} name="Restrictions" label={'Si'} onChange={() => setRestrictionsCheck(true)} />
+                <Radio crossOrigin={undefined} name="Restrictions" label={'No'} onChange={() => setRestrictionsCheck(false)} defaultChecked />
               </div>
+              {
+                restrictionsCheck
+                  ? <div>
+                    <Typography
+                      variant="h6"
+                      className="leading-[45px] mb-0 !text-gray-900 mt-3"
+                    >
+                      Restricciones alimenticias:
+                    </Typography>
+
+                    <div className="w-full flex justify-evenly flex-wrap">
+                      <Checkbox
+                        crossOrigin={undefined}
+                        label="Gluten"
+                        id="Gluten"
+                        value="No puedo consumir gluten"
+                        onChange={e => handleCheckboxChange(e, setRestrictions)}
+                      />
+                      <Checkbox
+                        crossOrigin={undefined}
+                        label="Lacteos"
+                        id="Lacteos"
+                        value="No puedo consumir gluten"
+                        onChange={e => handleCheckboxChange(e, setRestrictions)}
+                      />
+                      <Checkbox
+                        crossOrigin={undefined}
+                        label="Frutos secos"
+                        value="No puedo consumir frutos secos"
+                        onChange={e => handleCheckboxChange(e, setRestrictions)}
+                      />
+                      <Checkbox
+                        crossOrigin={undefined}
+                        label="Mariscos"
+                        value="No puedo consumir mariscos"
+                        onChange={e => handleCheckboxChange(e, setRestrictions)}
+                      />
+                      <Checkbox
+                        crossOrigin={undefined}
+                        label="Carne"
+                        value="No puedo consumir carne"
+                        onChange={e => handleCheckboxChange(e, setRestrictions)}
+                      />
+                    </div>
+                  </div>
+                  : <></>
+              }
+
             </form>
           </div>
 
@@ -773,6 +689,19 @@ const DataForm = () => {
           >
             <Typography variant="h5" className="text-center" color="white">
               Generar
+            </Typography>
+          </Button>
+
+          <Button
+            color="gray"
+            className="mb-3"
+            size="sm"
+            onClick={() => {
+              console.log(userData);
+            }}
+          >
+            <Typography variant="h5" className="text-center" color="white">
+              Debuger
             </Typography>
           </Button>
           {loading ? (
