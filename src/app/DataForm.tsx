@@ -148,7 +148,14 @@ const DataForm = () => {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
-      const promptText = `Hola mi nombre es ${userData.name}, actualmente peso ${userData.weight} kg y mido ${userData.height} cm y deseo hacer una dieta para ${userData.objective}. Actualmente por mis actividades y compromisos solo puedo realizar ${userData.activityHours} horas de actividad física por semana, el nivel de actividad física que mantengo es ${userData.physicalActivity}, mi objetivo es tener salud y energía durante el día, ${userData.diseases}, ${userData.restrictions}. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor. Toma el rol de un nutriologo con 20 años de experiencía para poder generar un plan.`;
+      const promptText =
+        `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm.
+
+    Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}.
+    
+    En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}.
+    
+    ¿Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, media mañana, comida, merienda y cena? Por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo: {opcion1:””, opcion2:””, opcion3: “”}, ...}`;
       setPrompt(promptText);
       const postData = {
         name: "",
@@ -283,7 +290,7 @@ const DataForm = () => {
                 variant="h6"
                 className="leading-[45px] mb-4 !text-gray-900 "
               >
-                Lllena el siguiente formulario con tu información personal para
+                Llena el siguiente formulario con tu información personal para
                 generar un dieta perzonalizada.
               </Typography>
             </div>
@@ -452,8 +459,25 @@ const DataForm = () => {
                 >
                   ¿Quieres describir la actividad fisica que realizas?
                 </Typography>
-                <Radio crossOrigin={undefined} name="Activity" label={'Si'} onChange={() => setActivityCheck(true)} />
-                <Radio crossOrigin={undefined} name="Activity" label={'No'} onChange={() => setActivityCheck(false)} defaultChecked />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Activity"
+                  label={'Si'}
+                  onChange={() => {
+                    setActivityDescription('');
+                    setActivityCheck(true);
+                  }}
+                />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Activity"
+                  label={'No'}
+                  onChange={() => {
+                    setActivityDescription('');
+                    setActivityCheck(false);
+                  }}
+                  defaultChecked
+                />
               </div>
               {activityCheck ? (
                 <div>
@@ -540,8 +564,25 @@ const DataForm = () => {
                     >
                       ¿Tienes Algún Padecimiento Médico?
                     </Typography>
-                    <Radio crossOrigin={undefined} name="Disease" label={'Si'} onChange={() => setDiseaseCheck(true)} />
-                    <Radio crossOrigin={undefined} name="Disease" label={'No'} onChange={() => setDiseaseCheck(false)} defaultChecked />
+                    <Radio
+                      crossOrigin={undefined}
+                      name="Disease"
+                      label={'Si'}
+                      onChange={() => {
+                        setDiseases('');
+                        setDiseaseCheck(true);
+                      }}
+                    />
+                    <Radio
+                      crossOrigin={undefined}
+                      name="Disease"
+                      label={'No'}
+                      onChange={() => {
+                        setDiseases('no tengo Ningún Padecimiento');
+                        setDiseaseCheck(false)
+                      }}
+                      defaultChecked
+                    />
                   </div>
                   {diseaseCheck ? (
                     <div>
@@ -592,8 +633,25 @@ const DataForm = () => {
                 >
                   ¿Consumes algún medicamento?
                 </Typography>
-                <Radio crossOrigin={undefined} name="Medicine" label={'Si'} onChange={() => setMedicinesCheck(true)} />
-                <Radio crossOrigin={undefined} name="Medicine" label={'No'} onChange={() => setMedicinesCheck(false)} defaultChecked />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Medicine"
+                  label={'Si'}
+                  onChange={() => {
+                    setMedicines('');
+                    setMedicinesCheck(true);
+                  }}
+                />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Medicine"
+                  label={'No'}
+                  onChange={() => {
+                    setMedicines('no estoy tomando ningún medicamento');
+                    setMedicinesCheck(false);
+                  }}
+                  defaultChecked
+                />
               </div>
               {medicinesCheck ? (
                 <div>
@@ -625,8 +683,23 @@ const DataForm = () => {
                 >
                   ¿Tienes alguna restricción alimentaria?
                 </Typography>
-                <Radio crossOrigin={undefined} name="Restrictions" label={'Si'} onChange={() => setRestrictionsCheck(true)} />
-                <Radio crossOrigin={undefined} name="Restrictions" label={'No'} onChange={() => setRestrictionsCheck(false)} defaultChecked />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Restrictions"
+                  label={'Si'}
+                  onChange={() => {
+                    setRestrictions('');
+                    setRestrictionsCheck(true)
+                  }} />
+                <Radio
+                  crossOrigin={undefined}
+                  name="Restrictions"
+                  label={'No'}
+                  onChange={() => {
+                    setRestrictions('no tengo restricciones alimentarias');
+                    setRestrictionsCheck(false)
+                  }}
+                  defaultChecked />
               </div>
               {
                 restrictionsCheck
@@ -650,7 +723,7 @@ const DataForm = () => {
                         crossOrigin={undefined}
                         label="Lacteos"
                         id="Lacteos"
-                        value="No puedo consumir gluten"
+                        value="No puedo consumir Lacteos"
                         onChange={e => handleCheckboxChange(e, setRestrictions)}
                       />
                       <Checkbox
@@ -697,7 +770,17 @@ const DataForm = () => {
             className="mb-3"
             size="sm"
             onClick={() => {
+
+              const prompt =
+                `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm.
+
+              Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}.
+              
+              En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}.
+              
+              ¿Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, media mañana, comida, merienda y cena? Por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo: {opcion1:””, opcion2:””, opcion3: “”}, ...}`;
               console.log(userData);
+              console.log(prompt);
             }}
           >
             <Typography variant="h5" className="text-center" color="white">
