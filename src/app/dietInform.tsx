@@ -2,7 +2,7 @@ import { Typography } from "@material-tailwind/react";
 
 type Props = {
     title: string,
-    content: Array<string>,
+    content: object,
     colorBase: string,
     colorSecundario: string
 }
@@ -16,11 +16,10 @@ function DesayunoCard({ title, content, colorBase, colorSecundario }: Props) {
 
     const tituloMap: { [key: string]: string } = {
         "almuerzo": "Almuerzo",
-        "antes_de_dormir": "Antes de Dormir",
+        "comida": "Comida",
         "cena": "Cena",
         "desayuno": "Desayuno",
-        "media_manana": "Media Mañana",
-        "media_tarde": "Media Tarde"
+        "merienda": "Merienda",
     };
 
     return (
@@ -33,12 +32,12 @@ function DesayunoCard({ title, content, colorBase, colorSecundario }: Props) {
             </Typography>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {content.map((opcion, i) => (
-                    <div key={i} className="bg-white rounded-lg p-4 flex flex-col items-center">
-                        <i className={`${iconosOpciones[i]} text-${coloresOpciones[i]} text-4xl mb-2`}></i>
-                        <p className="text-center">{opcion}</p>
-                    </div>
-                ))}
+            {Object.values(content).map((opcion, i) => (
+                <div key={i} className="bg-white rounded-lg p-4 flex flex-col items-center">
+                    <i className={`${iconosOpciones[i]} text-${coloresOpciones[i]} text-4xl mb-2`}></i>
+                    <p className="text-center">{opcion}</p>
+                </div>
+            ))}
             </div>
         </div>
     );

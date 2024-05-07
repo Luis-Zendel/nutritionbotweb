@@ -104,9 +104,12 @@ const DataForm = () => {
 
   const validateInputsFilled = () => {
     let allFieldsFilled = true;
-
+    console.log("Validation Inputs Filled")
+    console.log(userData)
+    const notRequired = ["diseases", "medicines", "activityDescription", "restrictions"]
     Object.entries(userData).forEach(([key, value]) => {
-      if (value === "") {
+      if (value === "" && !notRequired.includes(key)) {
+        console.log("Error:", key)
         setInputErrors((prevState) => ({ ...prevState, [key]: true }));
         allFieldsFilled = false;
       }
@@ -116,9 +119,12 @@ const DataForm = () => {
   };
 
   const handleGenereteDietClick = async () => {
-    const areNoErrors = Object.values(inputErrors).every(
+    // Algunos pueden ser false
+   /* const areNoErrors = Object.values(inputErrors).every(
       (value) => value === false
-    );
+    );*/
+
+    const areNoErrors = true
     const areInputsFilled = validateInputsFilled();
     setLoading(true);
 
@@ -142,6 +148,7 @@ const DataForm = () => {
 
     try {
       console.log(`Se genero la peticion con:`);
+
       const url = "https://chatbotapi-n32d.onrender.com/api/generate/diet";
 
       /*       41const postData = {
@@ -149,13 +156,11 @@ const DataForm = () => {
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
       const promptText =
-        `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm.
-
-    Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}.
-    
-    En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}.
-    
-    ¿Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, media mañana, comida, merienda y cena? Por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo: {opcion1:””, opcion2:””, opcion3: “”}, ...}`;
+        `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm. 
+        Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. 
+        Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}. En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. 
+        Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}. 
+        Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, almuerzo, comida, merienda y cena. Y por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo:  {opcion1:””, opcion2:””, opcion3: “”}, …}. Responde solo el objeto json por favor sin ningun texto extra`;
       setPrompt(promptText);
       const postData = {
         name: "",
@@ -841,7 +846,7 @@ const DataForm = () => {
             </>
           )}
 
-          {diet.almuerzo != "" ? (
+          {diet.desayuno.opcion1 != "" ? (
             <Typography variant="h3" className="text-center" color="blue-gray">
               Plan Alimenticio
             </Typography>

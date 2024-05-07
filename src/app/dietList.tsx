@@ -3,12 +3,12 @@ import { useDietContext } from './context/usediet';
 import { DesayunoCard } from './dietInform';
 
 interface Menu {
-    desayuno: string;
-    media_manana: string;
-    almuerzo: string;
-    media_tarde: string;
-    cena: string;
-    antes_de_dormir: string;
+    desayuno: {};
+    media_manana: {};
+    almuerzo: {};
+    media_tarde: {};
+    cena: {};
+    antes_de_dormir: {};
 }
 
 const coloresBase = [
@@ -39,17 +39,17 @@ const coloresSecundarios = [
 
 const DietList = () => {
 
-    const { diet, setDiet, dividirOpciones } = useDietContext();
+    const { diet, setDiet } = useDietContext();
 
     return (
         <section className={`max-w-6xl mx-auto w-full`}>
-            {diet.almuerzo != '' ?
+            {diet.desayuno.opcion1 != '' ?
                 <div className="flex flex-col items-center justify-center gap-4">
                     {Object.entries(diet).map(([title, content], index) => (
                         <DesayunoCard
                             key={title}
                             title={title}
-                            content={dividirOpciones(title as keyof Menu)}
+                            content={content}
                             colorBase={coloresBase[index]}
                             colorSecundario={coloresSecundarios[index]}
                         />
