@@ -19,6 +19,7 @@ import { GrUser } from "react-icons/gr";
 import { fetchDiet, fetchSaveDietPost } from "./api/api";
 import { useDietContext } from "./context/usediet";
 import DialogInfo from "./dialogInfo";
+import ModalLoading from "@/components/ModalLoading";
 interface Menu {
   desayuno: string;
   media_manana: string;
@@ -156,11 +157,7 @@ const DataForm = () => {
               time: "Wed, 21 Oct 2015 18:27:50 GMT",
             }; */
       const promptText =
-        `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm. 
-        Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. 
-        Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}. En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. 
-        Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}. 
-        Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, almuerzo, comida, merienda y cena. Y por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo:  {opcion1:””, opcion2:””, opcion3: “”}, …}. Responde solo el objeto json por favor sin ningun texto extra`;
+        `Hola, me llamo ${userData.name}. Tengo ${userData.age} años. Mi peso es de ${userData.weight} kg y mi altura es de ${userData.height} cm. Mi objetivo con esta dieta es ${userData.objective}. Mi nivel de actividad fisica es ${userData.physicalActivity}, dedicando aproximadamente ${userData.activityHours} horas semanales a la actividad física. Entre mis actividades se encuentran ${userData.activityDescription ? userData.activityDescription : 'ninguna en particular'}. En cuanto a mi salud, ${userData.diseases ? userData.diseases : 'No tengo ningnua enfermedad'} y de medicinas consumo: ${userData.medicines ? userData.medicines : 'no estoy tomando nigún medicamento'}. Es importante tener en cuenta que ${userData.restrictions ? userData.restrictions : 'no tengo restricciones alimentarias'}. Puedes en base a mis datos generar un plan alimenticio con las siguientes comidas desayuno, almuerzo, comida, merienda y cena. Y por favor 3 opciones en cada comida, responde esto en un objeto json. ejemplo {desayuno: {opcion1:””, opcion2:””, opcion3: “”}, almuerzo:  {opcion1:””, opcion2:””, opcion3: “”}, …}. Responde solo el objeto json por favor sin ningun texto extra o algún otro dato`;
       setPrompt(promptText);
       const postData = {
         name: "",
@@ -174,15 +171,17 @@ const DataForm = () => {
       //******************************************************
       //Valor quemado hasta que se tenga la API
       console.log(diet);
+      handleChangeLoading()
 
       const result = await fetchDiet(url, postData);
 
       if (result.success) {
+        setLoadingModal(false)
         console.log("Se recibio resultado ");
         console.log(result.data.data);
         setDiet(result.data.data);
-        setLoading(false);
       } else {
+        setLoadingModal(false);
         setOpenDialog(true);
         setDialogInfo({
           title: "¡Has generado muchas dietas!",
@@ -275,12 +274,17 @@ const DataForm = () => {
     }
   };
 
+  const [loadingModal, setLoadingModal] = useState(false)
+  const handleChangeLoading = () => {
+    setLoadingModal(!loadingModal)
+  }
 
 
   return (
     <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
       {session?.user ? (
         <>
+        <ModalLoading handleOpenLoading={handleChangeLoading} openValue={loadingModal}/>
           <div className="my-5 w-full mx-10">
             <div className="flex items-center justify-center">
               <Typography

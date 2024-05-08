@@ -10,6 +10,9 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { signIn, signOut} from 'next-auth/react'
 import { useSession } from "next-auth/react";
+import ModalLoading from "./ModalLoading";
+import ModalLogin from "./ModalLogin";
+import { useState } from "react";
 
 const NAV_MENU = ["Inicio", "Acerca de nosotros", "Comparte tu experiencia"];
 
@@ -57,6 +60,10 @@ export function Navbar() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const [loginModal, setloginModal] = useState(false)
+  const handleChangeLoading = () => {
+    setloginModal(!loginModal)
+  }
 
   return (
     <MTNavbar
@@ -66,6 +73,7 @@ export function Navbar() {
       color={isScrolling ? "white" : "transparent"}
       className="fixed top-0 z-50 border-0"
     >
+      <ModalLogin handleOpenLoading={handleChangeLoading} openValue={loginModal}/>
       <div className="container mx-auto flex items-center justify-between">
         <Typography
           as="a"
@@ -94,7 +102,7 @@ export function Navbar() {
         :
         (<div className="hidden items-center gap-2 lg:flex">
           
-            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signIn()}>Iniciar Sesión</Button>
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => setloginModal(true)}>Iniciar Sesión</Button>
         </div>)
         }
         <IconButton
@@ -126,7 +134,7 @@ export function Navbar() {
         </div>)
         :
         (<div className="items-center gap-2 lg:flex">
-            <Button color={isScrolling ? "gray" : "white"} onClick={ () => signIn()}>Iniciar Sesión</Button>
+            <Button color={isScrolling ? "gray" : "white"} onClick={ () => {setloginModal(true)}}>Iniciar Sesión</Button>
         </div>)
         }
           </div>
