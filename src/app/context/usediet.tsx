@@ -3,22 +3,59 @@ import React, { createContext, useContext, useState } from 'react';
 
 interface DietContextType {
   diet: {
-    almuerzo: string;
-    antes_de_dormir: string;
-    cena: string;
-    desayuno: string;
-    media_manana: string;
-    media_tarde: string;
+    desayuno: {
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    almuerzo:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    comida:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    merienda:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    cena:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
   };
   setDiet: React.Dispatch<React.SetStateAction<{
-    almuerzo: string;
-    antes_de_dormir: string;
-    cena: string;
-    desayuno: string;
-    media_manana: string;
-    media_tarde: string;
+    desayuno: {
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    almuerzo:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    comida:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    merienda:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
+    cena:{
+      opcion1: string,
+      opcion2: string,
+      opcion3: string
+    };
   }>>;
-  dividirOpciones: Function
 }
 
 
@@ -33,18 +70,36 @@ interface Menu {
 
 
 const initialDietState = {
-  almuerzo: "",
-  antes_de_dormir: "",
-  cena: "",
-  desayuno: "",
-  media_manana: "",
-  media_tarde: "",
+  desayuno: {
+    opcion1: "",
+    opcion2: "",
+    opcion3: ""
+  },
+  almuerzo:{
+    opcion1: "",
+    opcion2: "",
+    opcion3: ""
+  },
+  comida:{
+    opcion1: "",
+    opcion2: "",
+    opcion3: ""
+  },
+  merienda:{
+    opcion1: "",
+    opcion2: "",
+    opcion3: ""
+  },
+  cena:{
+    opcion1: "",
+    opcion2: "",
+    opcion3: ""
+  }
 };
 
 const DietContext = createContext<DietContextType>({
   diet: initialDietState,
   setDiet: () => { },
-  dividirOpciones: () => { }
 });
 
 export const useDietContext = () => useContext(DietContext);
@@ -54,19 +109,10 @@ export const DietProvider = ({ children }: React.PropsWithChildren) => {
   
 
   // Convertir el JSON en un objeto con arrays de opciones
-  function dividirOpciones(comida: keyof Menu): string[] {
-    // Dividir la cadena de opciones usando el salto de línea como separador
-    console.log("Resultado:  ")
-    console.log(diet)
-    const opciones = diet[comida].split('\n');
-    while (opciones.length >= 4) opciones.pop();
-    // Filtrar las opciones válidas y eliminar los números de las opciones
-    const opcionesFiltradas = opciones.filter(opcion => opcion.trim() !== '').map(opcion => opcion.replace(/^\d+\. /, ''));
-    return opcionesFiltradas;
-  }
+
 
   return (
-    <DietContext.Provider value={{ diet, setDiet, dividirOpciones }}>
+    <DietContext.Provider value={{ diet, setDiet }}>
       {children}
     </DietContext.Provider>
   );
