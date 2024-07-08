@@ -10,7 +10,7 @@ function Hero() {
     <div className="grid min-h-screen px-8">
       <div className="container relative z-10 my-auto mx-auto grid place-items-center text-center">
         <Typography variant="h1" color="white">
-        Explora los beneficios de una buena nutrición 
+        Genera Dietas Personalizadas Con IA
         </Typography>
         <Typography
           variant="lead"
@@ -18,13 +18,6 @@ function Hero() {
           className="mt-4 mb-12 w-full md:max-w-full lg:max-w-3xl"
         >
           Encuentra en nuestro portal una herramienta para mejorar tus habitos alimenticios
-        </Typography>
-        <Typography
-          variant="paragraph"
-          color="white"
-          className="mt-1 mb-7 font-medium uppercase"
-        >
-          Contactanos:
         </Typography>
         <div className="gap-8 flex">
           <IconButton variant="text" color="white" size="sm">

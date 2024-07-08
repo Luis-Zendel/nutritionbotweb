@@ -2,16 +2,16 @@ import { Typography } from "@material-tailwind/react";
 
 const LINKS = [
   {
-    title: "Company",
-    items: ["About Us", "Careers"],
+    title: "NUTRIBOTZI",
+    items: ["Sobre Nosotros", "Carreras"],
   },
   {
-    title: "Pages",
-    items: ["Login", "Register"],
+    title: "Páginas",
+    items: ["Iniciar Sesión", "Registrarse"],
   },
   {
     title: "Legal",
-    items: ["Terms", "Privacy"],
+    items: ["Términos", "Privacidad"],
   },
 ];
 
@@ -24,12 +24,11 @@ export function Footer() {
         <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
           <Typography
             as="a"
-            href="https://www.material-tailwind.com"
-            target="_blank"
+            href="#"
             variant="h4"
             className="mb-6"
           >
-            Material Tailwind
+            NUTRIBOTZI
           </Typography>
           <div className="grid grid-cols-3 justify-between gap-4">
             {LINKS.map(({ title, items }) => (
@@ -56,25 +55,21 @@ export function Footer() {
         <div className="mt-16 flex flex-wrap items-end justify-center gap-y-4 gap-x-8 border-t border-blue-gray-50 py-6 md:justify-between">
           <div className="text-center md:text-start">
             <Typography variant="h4" color="blue-gray" className="mb-2">
-              The reward for getting on the stage is fame.
+              NUTRIBOTZI - Generando dietas personalizadas con IA.
             </Typography>
             <Typography className="font-normal !text-gray-700">
-              The price of fame is you can&apos;t get off the stage.
+              Actualmente este es un MVP para recopilar información e ir probando módulos junto con el feedback del usuario.
             </Typography>
           </div>
           <Typography
             color="gray"
             className="text-center font-normal !text-gray-700"
           >
-            &copy; {CURRENT_YEAR} Made with{" "}
-            <a href="https://www.material-tailwind.com" target="_blank">
-              Material Tailwind
-            </a>{" "}
-            by{" "}
-            <a href="https://www.creative-tim.com" target="_blank">
-              Creative Tim
+            &copy; {CURRENT_YEAR} Desarrollado por{" "}
+            <a href="#" target="_blank">
+              Luis Zendel
             </a>
-            .
+            . Propietario intelectual del portal y nombre.
           </Typography>
         </div>
       </div>

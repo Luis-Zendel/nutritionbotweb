@@ -16,10 +16,6 @@ export default function Campaign() {
       <Navbar />
       <Hero />
       <ComingSoon />
-      <DietProvider>
-        <UserDietSection />
-        <DietList />
-      </DietProvider>
       <Comments />
       <Footer />
     </>

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { fetchListDiet, fetchSavedDiet } from './api/api';
 import { useDietContext } from './context/usediet';
 import { useSession } from 'next-auth/react';
+import { motion } from "framer-motion";
+
 interface Menu {
     desayuno: string;
     media_manana: string;
@@ -76,7 +78,8 @@ const SelectDiet = () => {
         setConsulta(true)
     }
     return (
-        <section className="flex flex-col items-center justify-center gap-4 w-full max-w-xl mx-auto mb-10 mt-10">
+        <>
+        <section className="flex flex-col items-center justify-center gap-4 w-full max-w-xl mx-auto mb-10 mt-10 hidden">
             {   savedDiets.length > 0  ? 
 
                 <Select name='select_diet' variant='outlined' label='Dieta consultada' className='' onChange={value => handleSelectDiet(value)}>
@@ -93,7 +96,26 @@ const SelectDiet = () => {
             </>
             }
         </section>
+        <section>
+            <DevelopmentMessage/>
+        </section>
+
+        </>
     )
 }
+
+function DevelopmentMessage() {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="p-6 bg-yellow-100 text-yellow-800 rounded-md shadow-md text-center"
+      >
+        <h2 className="text-2xl font-bold mb-2">¡En Desarrollo!</h2>
+        <p>El módulo que deseas consultar actualmente se encuentra en desarrollo. ¡Pronto tendrás la opción de acceder!</p>
+      </motion.div>
+    );
+  }
 
 export default SelectDiet

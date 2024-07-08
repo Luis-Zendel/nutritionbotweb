@@ -281,10 +281,10 @@ const DataForm = () => {
 
 
   return (
-    <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-20 pb-5">
+    <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 pt-10 pb-5">
       {session?.user ? (
         <>
-        <ModalLoading handleOpenLoading={handleChangeLoading} openValue={loadingModal}/>
+        <ModalLoading handleOpenLoading={()=>{}} openValue={loadingModal}/>
           <div className="my-5 w-full mx-10">
             <div className="flex items-center justify-center">
               <Typography
@@ -776,7 +776,7 @@ const DataForm = () => {
 
           <Button
             color="gray"
-            className="mb-3"
+            className="mb-3 hidden"
             size="sm"
             onClick={() => {
 
