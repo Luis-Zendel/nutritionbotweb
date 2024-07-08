@@ -5,6 +5,7 @@ import { BiFoodMenu } from 'react-icons/bi'
 import { BsCalendar2Heart } from 'react-icons/bs'
 import { FaUserDoctor } from 'react-icons/fa6'
 import { signIn, signOut} from 'next-auth/react'
+import Link from 'next/link'
 
 const ComingSoon = () => {
     return (
@@ -23,12 +24,13 @@ const ComingSoon = () => {
                             Un sencillo formulario te permitirá obtener una dieta personalizada que se ajusta a tus necesidades y objetivos.
                         </Typography>
                     </div>
-
-                    <Button className="gap-3 max-w-max mt-3" onClick={()=>{signIn()}}>
+                    <Link href="/generateDiet">
+                    <Button className="gap-3 max-w-max mt-3" onClick={()=>{}}>
                         <Typography variant='small' className='max-w-max' >
                             ¡Comienza Ahora!
                         </Typography>
                     </Button>
+                    </Link>
                 </div>
 
                 <div className='h-72 mt-5'>
