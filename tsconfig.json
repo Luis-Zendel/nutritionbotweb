@@ -17,6 +17,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": ["next-auth"], 
     "plugins": [
       {
         "name": "next"
@@ -39,7 +40,7 @@
     "types/**/*.ts", 
     "**/*.ts", 
     "**/*.tsx"
-  ],
+, "src/app/api/auth/[...nextauth]/route.js"  ],
   "exclude": [
     "node_modules"
   ]

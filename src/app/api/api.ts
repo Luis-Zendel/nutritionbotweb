@@ -1,3 +1,5 @@
+import { getSession } from "next-auth/react";
+
 type userData = {
     name: string,
     email: string,
@@ -13,10 +15,16 @@ type dietData = {
 
 const fetchDiet = async (url: string, data: userData) => {
     try {
+        console.log("Imprimiendo valores ")
+        console.log("Secret:", process.env.SECRET_KEY)
+        console.log("Secret:",  process.env.GOOGLE_CLIENT_ID)
+        const session = await getSession()
+        console.log("TOKEN: ", session?.user.customToken )
         const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": `Bearer ${session?.user?.customToken}`,
                 // Puedes agregar otros encabezados según sea necesario
             },
             body: JSON.stringify(data),

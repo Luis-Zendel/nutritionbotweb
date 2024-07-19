@@ -150,7 +150,7 @@ const DataForm = () => {
     try {
       console.log(`Se genero la peticion con:`);
 
-      const url = "https://chatbotapi-n32d.onrender.com/api/generate/diet";
+      const url = "http://127.0.0.1:8000/api/generate/diet";
 
       /*       41const postData = {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
