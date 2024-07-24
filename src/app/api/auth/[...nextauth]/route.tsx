@@ -2,11 +2,6 @@ import NextAuth, { NextAuthOptions, User as NextAuthUser, Session as NextAuthSes
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken"
 
-
-console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET);
-console.log("SECRET_KEY:", process.env.SECRET_KEY);
-
 const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -26,7 +21,7 @@ const authOptions: NextAuthOptions = {
         token.customToken = jwt.sign(
           { userId: token.sub, email: token.email },
           process.env.SECRET_KEY,
-          { expiresIn: '1h' }
+          { expiresIn: '30d' }
         )
       }
       if (user) {
