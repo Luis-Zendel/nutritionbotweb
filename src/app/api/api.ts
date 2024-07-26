@@ -15,9 +15,6 @@ type dietData = {
 
 const fetchDiet = async (url: string, data: userData) => {
     try {
-        console.log("Imprimiendo valores ")
-        console.log("Secret:", process.env.SECRET_KEY)
-        console.log("Secret:",  process.env.GOOGLE_CLIENT_ID)
         const session = await getSession()
         console.log("TOKEN: ", session?.user.customToken )
         const response = await fetch(url, {

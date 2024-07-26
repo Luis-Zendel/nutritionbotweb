@@ -15,11 +15,12 @@ import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { GiAges, GiClockwork, GiPencilRuler, GiWeight } from "react-icons/gi";
 import { GrUser } from "react-icons/gr";
-
 import { fetchDiet, fetchSaveDietPost } from "./api/api";
 import { useDietContext } from "./context/usediet";
 import DialogInfo from "./dialogInfo";
 import ModalLoading from "@/components/ModalLoading";
+import { API_URL } from "../../apiurl";
+
 interface Menu {
   desayuno: string;
   media_manana: string;
@@ -150,7 +151,7 @@ const DataForm = () => {
     try {
       console.log(`Se genero la peticion con:`);
 
-      const url = "http://127.0.0.1:8000/api/generate/diet";
+      const url = API_URL + "/diets/generate";
 
       /*       41const postData = {
               name: "Hola mi nombre es Luis, actualmente peso 87 kg y mido 172 cm y deseo hacer una dieta para perder peso sin necesidad sin perder masa muscular. Actualmente por mis actividades y compromisos solo puedo realizar 3 horas de actividad física por semana  el tipo de actividad fisica que realizo es Boxeo y suelo correr algunos días, mi objetivo es tener salud y energía durante el día, No tengo enfermedades actualmente, restricciones alimentarias no tengo. Puedes ayudarme a dar un ejemplo de una dieta que necesito para lograr mi objetivo, por favor utiliza el siguiente formato: Desayuno, media mañana, almuerzo, media tarde, cena y antes de dormir con 3 opciones en cada comida por favor.",
@@ -179,7 +180,14 @@ const DataForm = () => {
         setLoadingModal(false)
         console.log("Se recibio resultado ");
         console.log(result.data.data);
-        setDiet(result.data.data);
+        const organizedDiet = {
+          "desayuno": result.data.data.desayuno,
+          "almuerzo": result.data.data.almuerzo,
+          "comida": result.data.data.comida,
+          "merienda": result.data.data.merienda,
+          "cena": result.data.data.cena,
+        }
+        setDiet(organizedDiet);
       } else {
         setLoadingModal(false);
         setOpenDialog(true);
@@ -230,8 +238,7 @@ const DataForm = () => {
 
   const handleClickGuardar = async () => {
     try {
-      const url =
-        "https://chatbotapi-n32d.onrender.com/api/post/save/diet/user";
+      const url = "";
       const document = {
         name: dietName,
         prompt: promptData,

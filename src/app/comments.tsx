@@ -4,10 +4,15 @@ import { Button, Input, Typography } from "@material-tailwind/react";
 import { GrFacebook, GrInstagram, GrTwitter } from "react-icons/gr";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { getSession } from "next-auth/react";
+import {API_URL} from '../../apiurl'
 
 
 const fetchComment= async (dataPost: any) => {
-  const URL = 'https://chatbotapi-n32d.onrender.com/api/save/comment' //simula el comprtamiento de la API
+  const URL = API_URL + "/comments/save"
+  const session = await getSession()
+  console.log(URL , "ESTA ES LA URL A LA CUAL SE ENVIA EL COMENTARIO ")
+  //simula el comprtamiento de la API
   
   try {
       
@@ -15,6 +20,7 @@ const fetchComment= async (dataPost: any) => {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${session?.user?.customToken}`,
               // Puedes agregar otros encabezados según sea necesario
           },
           body: JSON.stringify(dataPost),
@@ -52,7 +58,7 @@ export function Comments() {
       const data = {
         email: session?.user?.email,
         title: title, 
-        comment: comment
+        comment: comment,
       }
       fetchComment(data)
       
