@@ -85,7 +85,7 @@ export function Navbar(props: {notHomePage?: boolean}) {
           className="text-lg font-bold"
           color={isScrolling || props.notHomePage ? "blue-gray" : "white"}
         >
-          NUTRIBOTZI
+          NutBo
         </Typography>
         <ul
           className={`ml-10 hidden items-center gap-6 lg:flex ${

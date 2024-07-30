@@ -1,6 +1,8 @@
 import NextAuth, { NextAuthOptions, User as NextAuthUser, Session as NextAuthSession, JWT as NextAuthJWT } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken"
+import { fetchEmail } from "../../api";
+import { API_URL } from "../../../../../apiurl";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -39,6 +41,18 @@ const authOptions: NextAuthOptions = {
       }
       console.log("Session Callback - After:", session);
       return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log("GUARDAR USUARIO ")
+      const url = API_URL + "/users/save"
+      const userPost = {
+        "email": user.email,
+        "account": account,
+        "user": user
+      }
+      console.log(userPost)
+      fetchEmail(url, userPost)
+      return true
     },
   },
 };

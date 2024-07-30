@@ -143,8 +143,42 @@ const fetchSavedDiet = async (id: string) => {
 }
 
 
+
+const fetchEmail= async (url: string, data: any) => {
+    try {
+        const session = await getSession()
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session?.user?.customToken}`,
+                // Puedes agregar otros encabezados según sea necesario
+            },
+            body: JSON.stringify(data),
+        });
+
+
+        if (!response.ok) {
+            throw new Error("No se genero respuesta ");
+        }
+
+        const result = await response.json();
+
+        return {
+            success: response.status !== 200,
+            data: result
+        }
+
+    } catch (error) {
+        console.error("Error al realizar la solicitud:", error);
+        throw error;
+    }
+};
+
+
+
 export {
-    fetchDiet, fetchListDiet, fetchSavedDiet, fetchSaveDietPost
+    fetchDiet, fetchListDiet, fetchSavedDiet, fetchSaveDietPost, fetchEmail
 };
 
 

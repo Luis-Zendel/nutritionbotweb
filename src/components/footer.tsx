@@ -2,7 +2,7 @@ import { Typography } from "@material-tailwind/react";
 
 const LINKS = [
   {
-    title: "NUTRIBOTZI",
+    title: "NutBo",
     items: ["Sobre Nosotros", "Carreras"],
   },
   {
@@ -28,7 +28,7 @@ export function Footer() {
             variant="h4"
             className="mb-6"
           >
-            NUTRIBOTZI
+            NutBo
           </Typography>
           <div className="grid grid-cols-3 justify-between gap-4">
             {LINKS.map(({ title, items }) => (
@@ -55,7 +55,7 @@ export function Footer() {
         <div className="mt-16 flex flex-wrap items-end justify-center gap-y-4 gap-x-8 border-t border-blue-gray-50 py-6 md:justify-between">
           <div className="text-center md:text-start">
             <Typography variant="h4" color="blue-gray" className="mb-2">
-              NUTRIBOTZI - Generando dietas personalizadas con IA.
+              NutBo - Generando dietas personalizadas con IA.
             </Typography>
             <Typography className="font-normal !text-gray-700">
               Actualmente este es un MVP para recopilar información e ir probando módulos junto con el feedback del usuario.
